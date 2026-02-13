@@ -22,4 +22,3 @@ def import_metadata(input_path="data/input/release_midas.xlsx"):
     df = excel_data.parse(sheet_name)
 
     return df
-    return df
