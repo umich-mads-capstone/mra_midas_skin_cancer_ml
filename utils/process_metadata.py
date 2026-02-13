@@ -4,7 +4,9 @@ import pandas as pd
 
 
 def import_metadata(input_path="data/input/release_midas.xlsx"):
-    """Helper function to import metadata."""
+    """
+    Helper function to import MIDA dataset for both metadata and image modeling tasks.
+    """
     project_root = Path(__file__).parent.parent.parent
     file_path = (
         project_root
