@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 
 
-def import_metadata(input_path="data/input/release_midas.xlsx"):
+def import_metadata():
     """
     Helper function to import MIDA dataset for both metadata and image modeling tasks.
     """
