@@ -33,7 +33,7 @@ def label_benign(row):
     Label the row as 'benign' or 'malignant' based on the content
     of the row.
     """
-    if pd.isna(row):
+    if row == "missing":
         return "missing"
 
     parts = row.split("-")
@@ -65,7 +65,10 @@ def process_target(df):
         "clinical_impression_1"
     ]
 
+    df["midas_path"] = df["midas_path"].fillna("missing")
+
     df["midas_path_binary"] = df["midas_path"].apply(label_benign)
+
     return df
 
 
