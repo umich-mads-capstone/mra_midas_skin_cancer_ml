@@ -78,3 +78,51 @@ def export_metadata(df, file_path=None):
         file_path = get_data_dir() / "output" / "processed_metadata.xlsx"
 
     df.to_excel(file_path, index=False)
+
+
+def dedupe_metadata(df):
+    """
+    Helper function to de-duplicate metadata.
+    Returns a DataFrame with one row per lesion.
+    """
+
+    cols = [
+        'midas_path_binary',
+        'midas_record_id',
+        'midas_location',
+        'midas_age',
+        'midas_fitzpatrick',
+        'midas_ethnicity',
+        'midas_race',
+        'length_(mm)',
+        'width_(mm)'
+    ]
+
+    metadata_df = df[cols].copy()
+
+    # Remove duplicates (three images per lesion)
+    metadata_df = metadata_df.drop_duplicates()
+
+    # Create a unique key per patient and lesion
+    metadata_df['lesion_key'] = (
+        metadata_df['midas_record_id'].astype(str) + '_' +
+        metadata_df['midas_location'].astype(str) + '_' +
+        metadata_df['length_(mm)'].astype(str) + 'x' +
+        metadata_df['width_(mm)'].astype(str)
+    )
+
+    # There are two records that are duplicates due to data quality issues. Keep the last one. 
+    metadata_df = (
+        metadata_df
+        .drop_duplicates(subset='lesion_key', keep='last')
+    )
+
+    # Check for uniqueness
+    metadata_df['lesion_key'].is_unique
+
+    # Add integer index
+    metadata_df = metadata_df.reset_index(drop=True)
+    metadata_df.index.name = 'row_id'
+
+    # Return meta_df
+    return metadata_df
