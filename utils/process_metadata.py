@@ -80,6 +80,41 @@ def export_metadata(df, file_path=None):
     df.to_excel(file_path, index=False)
 
 
+def create_lesion_key(df):
+    """
+    Create a unique key for each lesion based on patient ID,
+    location, and size.
+    """
+
+    key_df = df.copy()
+
+    key_df["lesion_key"] = (
+        key_df["midas_record_id"].astype(str)
+        + "_"
+        + key_df["midas_location"].astype(str)
+        + "_"
+        + key_df["length_(mm)"].astype(str)
+        + "x"
+        + key_df["width_(mm)"].astype(str)
+    )
+    return key_df
+
+
+def sort_metadata(df):
+    """Sort metadata by patient ID, lesion location, and control status."""
+
+    sorted_df = df.sort_values(
+        by=[
+            "midas_record_id",  # patient ID
+            "midas_location",  # lesion location
+            "midas_iscontrol",  # control vs non-control (yes -> no)
+        ],
+        ascending=[True, True, False],
+    )
+
+    return sorted_df
+
+
 def dedupe_metadata(df):
     """
     Helper function to de-duplicate metadata.
@@ -87,42 +122,40 @@ def dedupe_metadata(df):
     """
 
     cols = [
-        'midas_path_binary',
-        'midas_record_id',
-        'midas_location',
-        'midas_age',
-        'midas_fitzpatrick',
-        'midas_ethnicity',
-        'midas_race',
-        'length_(mm)',
-        'width_(mm)'
+        "midas_path_binary",
+        "midas_record_id",
+        "midas_location",
+        "midas_age",
+        "midas_fitzpatrick",
+        "midas_ethnicity",
+        "midas_race",
+        "length_(mm)",
+        "width_(mm)",
     ]
 
-    metadata_df = df[cols].copy()
+    metadata_df = df.copy()
+
+    # Sort "midas_iscontrol" by descending (yes -> no)
+    # to keep the last record which is the non-control
+    # if there are duplicates due to data quality issues.
+    metadata_df = sort_metadata(metadata_df)
 
     # Remove duplicates (three images per lesion)
-    metadata_df = metadata_df.drop_duplicates()
+    metadata_df = metadata_df[cols].drop_duplicates()
 
     # Create a unique key per patient and lesion
-    metadata_df['lesion_key'] = (
-        metadata_df['midas_record_id'].astype(str) + '_' +
-        metadata_df['midas_location'].astype(str) + '_' +
-        metadata_df['length_(mm)'].astype(str) + 'x' +
-        metadata_df['width_(mm)'].astype(str)
-    )
+    metadata_df = create_lesion_key(metadata_df)
 
-    # There are two records that are duplicates due to data quality issues. Keep the last one. 
-    metadata_df = (
-        metadata_df
-        .drop_duplicates(subset='lesion_key', keep='last')
-    )
+    # There are 26 records that are duplicates due to data quality issues.
+    # Keep the last one or the non-controls if due to "midas_iscontrol" issues.
+    metadata_df = metadata_df.drop_duplicates(subset="lesion_key", keep="last")
 
     # Check for uniqueness
-    metadata_df['lesion_key'].is_unique
+    print(metadata_df["lesion_key"].is_unique)
 
     # Add integer index
     metadata_df = metadata_df.reset_index(drop=True)
-    metadata_df.index.name = 'row_id'
+    metadata_df.index.name = "row_id"
 
     # Return meta_df
     return metadata_df
