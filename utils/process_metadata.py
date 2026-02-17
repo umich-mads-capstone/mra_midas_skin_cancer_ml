@@ -1,3 +1,7 @@
+"""
+Utility functions for processing the MIDAS metadata Excel file.
+"""
+
 from pathlib import Path
 
 import pandas as pd
