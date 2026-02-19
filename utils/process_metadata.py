@@ -155,7 +155,10 @@ def dedupe_metadata(df):
     metadata_df = metadata_df.drop_duplicates(subset="lesion_key", keep="last")
 
     # Check for uniqueness
-    print(metadata_df["lesion_key"].is_unique)
+    unique_count = metadata_df["lesion_key"].nunique()
+    is_unique = metadata_df["lesion_key"].is_unique
+    print(f"Is unique: {is_unique}")
+    print(f"Unique count: {unique_count} \n")
 
     # Add integer index
     metadata_df = metadata_df.reset_index(drop=True)
@@ -163,3 +166,64 @@ def dedupe_metadata(df):
 
     # Return meta_df
     return metadata_df
+
+
+def create_image_found_ind(df, raw_images_dir, file_col="midas_file_name"):
+    """
+    Check if each image listed in df exists in raw_images_dir by matching
+    lowercased exact filenames with .jpg, .jpeg, _cropped.jpg, or _cropped.jpeg.
+    """
+
+    raw_images_dir = Path(raw_images_dir)
+
+    all_files_map = {
+        p.name.lower(): p.name for p in raw_images_dir.iterdir() if p.is_file()
+    }
+
+    missing_files = []
+
+    def check_found(file_name):
+        stem = Path(file_name).stem.lower()
+        candidates = [
+            f"{stem}.jpg",
+            f"{stem}.jpeg",
+            f"{stem}_cropped.jpg",
+            f"{stem}_cropped.jpeg",
+        ]
+        for candidate in candidates:
+            if candidate in all_files_map:
+                return "Yes", all_files_map[candidate]
+        missing_files.append(file_name)
+        return "No", ""
+
+    df = df.copy()
+    df[["image_found", "matched_file"]] = df[file_col].apply(
+        lambda x: pd.Series(check_found(x))
+    )
+
+    if missing_files:
+        print(f"Total missing files: {len(missing_files)}")
+        for f in missing_files:
+            print(f"No file found: {f}")
+        print()
+
+    return df
+
+
+def drop_na_target_img(df):
+    """ "
+    Drop rows where target is "missing" or image is "n/a - virtual" or not
+    found.
+    """
+    drop_df = df.copy()
+
+    drop_df = create_image_found_ind(
+        drop_df, get_data_dir() / "input" / "raw_images"
+    )
+
+    drop_df = drop_df[
+        (drop_df["midas_path_binary"] != "missing")
+        & (drop_df["midas_distance"] != "n/a - virtual")
+        & (drop_df["image_found"] != "No")
+    ]
+    return drop_df

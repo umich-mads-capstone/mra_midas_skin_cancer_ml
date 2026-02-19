@@ -14,8 +14,10 @@ def check_split_ratios(dist_dict):
         print(f"\n{dist}")
 
         # Split distribution
-        print("Split raw counts:")
+        print("Split raw counts")
+
         print(df["split"].value_counts())
+        print(f"total {len(df)}")
 
         print("\nSplit proportions:")
         print(df["split"].value_counts(normalize=True))
