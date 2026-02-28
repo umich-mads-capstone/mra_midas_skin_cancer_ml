@@ -63,18 +63,27 @@ def merge_image_pred():
             left_on=["matched_file", "midas_path_binary"],
             right_on=["file_name", "actual_label"],
             how="left",
-        ).drop(
-            columns=[
-                "midas_record_id",
-                "midas_file_name",
-                "matched_file",
-                "midas_path_binary",
-                "split",
-                "file_name",
-                "actual_label",
-            ]
         )
 
+        drop_cols = [
+            "midas_record_id",
+            "midas_file_name",
+            "matched_file",
+            "midas_path_binary",
+            "split",
+            "file_name",
+        ]
+        if split != "1ft":
+            drop_cols.append("actual_label")
+
+        split_pred_df = split_pred_df.drop(columns=drop_cols)
+
         master_df = master_df.merge(split_pred_df, on="lesion_key", how="left")
+
+    if "actual_label" in master_df.columns:
+        ordered_columns = [
+            col for col in master_df.columns if col != "actual_label"
+        ] + ["actual_label"]
+        master_df = master_df[ordered_columns]
 
     return master_df
