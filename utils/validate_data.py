@@ -52,22 +52,3 @@ def count_files_in_image_folders(root_dir):
 
                 file_count = sum(p.is_file() for p in folder.iterdir())
                 print(f"{split:<5} / {label:<9}: {file_count}")
-
-
-def check_master_split(master_df):
-
-    train_ids = set(
-        master_df.loc[master_df["split"] == "train", "midas_record_id"]
-    )
-    val_ids = set(
-        master_df.loc[master_df["split"] == "val", "midas_record_id"]
-    )
-    test_ids = set(
-        master_df.loc[master_df["split"] == "test", "midas_record_id"]
-    )
-
-    assert train_ids.isdisjoint(val_ids)
-    assert train_ids.isdisjoint(test_ids)
-    assert val_ids.isdisjoint(test_ids)
-
-    print("✅ Master split is mutually exclusive.")
