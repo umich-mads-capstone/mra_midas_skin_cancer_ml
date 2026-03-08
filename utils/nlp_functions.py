@@ -116,4 +116,27 @@ def svd_top_phrases(
             })
 
     return pd.DataFrame(rows).sort_values(["component", "direction", "rank"])
+
+def apply_note_embeddings_tfidf_svd(
+    df: pd.DataFrame,
+    fitted_pipeline: Pipeline,
+    text_col: str,
+    out_prefix: str = "note_svd",
+) -> pd.DataFrame:
+    """
+    Transform-only version: uses a fitted TFIDF+SVD pipeline to add SVD columns.
+    """
+    if text_col not in df.columns:
+        raise KeyError(f"{text_col!r} not found in df.columns")
+
+    texts = df[text_col].map(basic_clean_clinical_text).fillna("")
+    X_reduced = fitted_pipeline.transform(texts)
+
+    df_out = df.copy()
+    k = X_reduced.shape[1]
+    for i in range(k):
+        df_out[f"{out_prefix}_{i:03d}"] = X_reduced[:, i].astype(np.float32)
+
+    return df_out
+    
     

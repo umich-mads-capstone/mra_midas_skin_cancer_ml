@@ -131,7 +131,7 @@ def dedupe_metadata(df):
         "midas_location",
         "midas_age",
         "midas_fitzpatrick",
-        "midas_ethnicity",
+        #"midas_ethnicity",
         "midas_race",
         "length_(mm)",
         "width_(mm)",
