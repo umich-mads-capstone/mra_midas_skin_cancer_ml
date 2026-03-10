@@ -24,11 +24,21 @@ def load_image_split_keys(splits):
 
 
 def load_pred_file(split):
-    """Load the most recent prediction file for the specified split."""
+    """Load the best prediction file for the specified split."""
 
-    split_dir = IMAGE_MODEL_DIR / split
-    files = list(split_dir.glob("*_predictions.xlsx"))
-    return max(files, key=lambda f: f.stat().st_mtime) if files else None
+    pred_files = {
+        "1ft": IMAGE_MODEL_DIR
+        / split
+        / "ResNet_20260309_222933_predictions.xlsx",
+        "6in": IMAGE_MODEL_DIR
+        / split
+        / "ResNet_20260309_223847_predictions.xlsx",
+        "dscope": IMAGE_MODEL_DIR
+        / split
+        / "ResNet_20260309_222158_predictions.xlsx",
+    }
+
+    return pred_files.get(split)
 
 
 def merge_image_pred():
@@ -36,11 +46,8 @@ def merge_image_pred():
 
     splits = ["1ft", "6in", "dscope"]
 
-    master_df = pd.read_excel(
-        DATA_OUTPUT_DIR / "split_keys" / "master_lesion_split_lookup.xlsx"
-    )
-    master_df = master_df[master_df["split"] == "test"].copy()
     key_dfs = load_image_split_keys(splits)
+    split_pred_dfs = {}
 
     for split in splits:
         pred_file = load_pred_file(split)
@@ -50,40 +57,22 @@ def merge_image_pred():
         model_prefix = pred_file.stem.split("_")[0].lower()
         pred_df = pd.read_excel(pred_file).rename(
             columns={
-                "probability_score": f"{model_prefix}_{split}_probability_score",
+                "malignant_probability": f"{model_prefix}_{split}_malignant_probability",
                 "prediction_label": f"{model_prefix}_{split}_prediction_label",
             }
         )
 
         key_df = key_dfs[split]
-        key_df_test = key_df[key_df["split"] == "test"]
+        print(f"Length of {split} key_df: {len(key_df)}")
+        print(f"Length of {split} pred_df: {len(pred_df)}")
 
-        split_pred_df = key_df_test.merge(
+        split_pred_df = key_df.merge(
             pred_df,
-            left_on=["matched_file", "midas_path_binary"],
-            right_on=["file_name", "actual_label"],
+            left_on=["matched_file"],
+            right_on=["file_name"],
             how="left",
         )
+        print(f"Length of {split} merged pred: {len(split_pred_df)}")
+        split_pred_dfs[split] = split_pred_df
 
-        drop_cols = [
-            "midas_record_id",
-            "midas_file_name",
-            "matched_file",
-            "midas_path_binary",
-            "split",
-            "file_name",
-        ]
-        if split != "1ft":
-            drop_cols.append("actual_label")
-
-        split_pred_df = split_pred_df.drop(columns=drop_cols)
-
-        master_df = master_df.merge(split_pred_df, on="lesion_key", how="left")
-
-    if "actual_label" in master_df.columns:
-        ordered_columns = [
-            col for col in master_df.columns if col != "actual_label"
-        ] + ["actual_label"]
-        master_df = master_df[ordered_columns]
-
-    return master_df
+    return split_pred_dfs
