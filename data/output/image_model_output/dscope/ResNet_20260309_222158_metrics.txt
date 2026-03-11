@@ -1,0 +1,11 @@
+Accuracy: 60.22%
+ROC AUC (malignant): 0.7657
+
+              precision    recall  f1-score   support
+
+      benign     0.8667    0.2708    0.4127        48
+   malignant     0.5513    0.9556    0.6992        45
+
+    accuracy                         0.6022        93
+   macro avg     0.7090    0.6132    0.5559        93
+weighted avg     0.7141    0.6022    0.5513        93
