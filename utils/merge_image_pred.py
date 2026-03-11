@@ -11,68 +11,81 @@ DATA_OUTPUT_DIR = get_data_dir() / "output"
 IMAGE_MODEL_DIR = DATA_OUTPUT_DIR / "image_model_output"
 
 
-def load_image_split_keys(splits):
-    """Load the split key dataframes for the specified splits."""
+def load_image_split_keys(dists):
+    """Load the split key dataframes for the specified dists."""
 
     split_key_dfs = {
-        split: pd.read_excel(
-            DATA_OUTPUT_DIR / "split_keys" / f"{split}_split_image_data.xlsx"
+        dist: pd.read_excel(
+            DATA_OUTPUT_DIR / "split_keys" / f"{dist}_split_image_data.xlsx"
         )
-        for split in splits
+        for dist in dists
     }
     return split_key_dfs
 
 
-def load_pred_file(split):
-    """Load the best prediction file for the specified split."""
+def load_pred_file(dist, split):
+    """Load exactly one prediction file for a given distance and split."""
 
-    pred_files = {
-        "1ft": IMAGE_MODEL_DIR
-        / split
-        / "ResNet_20260309_222933_predictions.xlsx",
-        "6in": IMAGE_MODEL_DIR
-        / split
-        / "ResNet_20260309_223847_predictions.xlsx",
-        "dscope": IMAGE_MODEL_DIR
-        / split
-        / "ResNet_20260309_222158_predictions.xlsx",
-    }
+    model_dir = IMAGE_MODEL_DIR / dist
+    files = list(model_dir.glob(f"*_{split}_predictions.xlsx"))
 
-    return pred_files.get(split)
+    if not files:
+        raise FileNotFoundError(
+            f"No prediction file found for dist='{dist}', split='{split}' in {model_dir}."
+        )
+
+    if len(files) > 1:
+        file_names = [f.name for f in files]
+        raise ValueError(
+            f"Expected exactly one prediction file for dist='{dist}', split='{split}', "
+            f"but found {len(files)}: {file_names}"
+        )
+
+    return files[0]
 
 
 def merge_image_pred():
-    """Merge the image prediction results back into the master lesion-level dataframe."""
+    """Return one merged dataframe per distance with split-key metadata."""
 
-    splits = ["1ft", "6in", "dscope"]
+    dists = ["1ft", "6in", "dscope"]
+    splits = ["train", "val", "test"]
+    output = {}
+    key_dfs = load_image_split_keys(dists)
 
-    key_dfs = load_image_split_keys(splits)
-    split_pred_dfs = {}
+    for dist in dists:
+        split_merged_dfs = []
+        key_df_all = key_dfs[dist]
 
-    for split in splits:
-        pred_file = load_pred_file(split)
-        if pred_file is None:
-            continue
+        for split in splits:
+            pred_file = load_pred_file(dist, split)
+            pred_df = pd.read_excel(pred_file)
+            key_df = key_df_all[key_df_all["split"] == split].copy()
 
-        model_prefix = pred_file.stem.split("_")[0].lower()
-        pred_df = pd.read_excel(pred_file).rename(
-            columns={
-                "malignant_probability": f"{model_prefix}_{split}_malignant_probability",
-                "prediction_label": f"{model_prefix}_{split}_prediction_label",
-            }
-        )
+            pred_subset = pred_df[
+                ["file_name", "malignant_probability", "prediction_label"]
+            ].rename(
+                columns={
+                    "malignant_probability": f"{dist}_malignant_probability",
+                    "prediction_label": f"{dist}_prediction_label",
+                }
+            )
 
-        key_df = key_dfs[split]
-        print(f"Length of {split} key_df: {len(key_df)}")
-        print(f"Length of {split} pred_df: {len(pred_df)}")
+            merged_df = key_df.merge(
+                pred_subset,
+                left_on="matched_file",
+                right_on="file_name",
+                how="left",
+            )
+            if "file_name" in merged_df.columns:
+                merged_df = merged_df.drop(columns=["file_name"])
 
-        split_pred_df = key_df.merge(
-            pred_df,
-            left_on=["matched_file"],
-            right_on=["file_name"],
-            how="left",
-        )
-        print(f"Length of {split} merged pred: {len(split_pred_df)}")
-        split_pred_dfs[split] = split_pred_df
+            split_merged_dfs.append(merged_df)
 
-    return split_pred_dfs
+            print(f"Length of {dist}-{split} key rows: {len(key_df)}")
+            print(f"Length of {dist}-{split} pred rows: {len(pred_df)}")
+            print(f"Length of {dist}-{split} merged rows: {len(merged_df)}")
+
+        output[dist] = pd.concat(split_merged_dfs, ignore_index=True)
+        print(f"Length of {dist} combined rows: {len(output[dist])}")
+
+    return output
