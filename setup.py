@@ -22,7 +22,7 @@ setup(
         "mra_midas_skin_cancer_ml.notebooks": "notebooks",
     },
     install_requires=read_requirements(),
-    python_requires=">=3.7",
+    python_requires=">=3.9",
     description="ML models on the Stanford MRA-MIDAS skin cancer dataset",
     author="Jerome Wong, Kaitlin (Kaily) Daida",
     author_email="jrmwong@umich.edu, kdaida@umich.edu",
