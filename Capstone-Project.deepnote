@@ -2,7 +2,7 @@ environment: {}
 execution: {}
 metadata:
   createdAt: 2026-02-04T14:56:27.465Z
-  modifiedAt: 2026-03-21T15:52:34.591Z
+  modifiedAt: 2026-03-21T17:22:36.125Z
 project:
   id: 815c7d4b397544eeb19c2b986faab6b6
   integrations:
@@ -2747,8 +2747,9 @@ project:
           blockGroup: af60a4bf8eb446fd960922b8073ab748
           sortingKey: "000001"
           contentHash: 8d2fa896
-          executionFinishedAt: 2026-03-21T15:21:08.437Z
-          executionStartedAt: 2026-03-21T15:21:06.852Z
+          executionCount: 1
+          executionFinishedAt: 2026-03-21T17:17:56.240Z
+          executionStartedAt: 2026-03-21T17:17:54.622Z
           type: code
           content: >-
             %%bash
@@ -2761,9 +2762,9 @@ project:
               else echo "There's no requirements.txt, so nothing to install."
             fi
           metadata:
-            execution_start: 1774106466852
-            execution_millis: 1585
-            execution_context_id: 6d88c691-4467-4da7-ac3f-fed1d03ac0d5
+            execution_start: 1774113474622
+            execution_millis: 1618
+            execution_context_id: 82bbff75-8275-4161-b3b2-92d27ba6627e
       executionMode: block
       id: e44b1600056645f4bca90d23da85b163
       isModule: false
@@ -7164,17 +7165,17 @@ project:
           sortingKey: "000000"
           contentHash: 2f19d1f9
           executionCount: 1
-          executionFinishedAt: 2026-03-21T15:46:33.032Z
-          executionStartedAt: 2026-03-21T15:46:33.032Z
+          executionFinishedAt: 2026-03-21T17:17:59.873Z
+          executionStartedAt: 2026-03-21T17:17:59.872Z
           type: code
           content: >-
             %load_ext autoreload
 
             %autoreload 2
           metadata:
-            execution_start: 1774107993032
-            execution_millis: 0
-            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+            execution_start: 1774113479872
+            execution_millis: 1
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 4482108e65e74155890622e19d0eac30
           blockGroup: 56daf293-99fe-440c-9c98-de934cdf6535
           sortingKey: "000001"
@@ -7186,8 +7187,8 @@ project:
           sortingKey: "000002"
           contentHash: 5d1c301b
           executionCount: 2
-          executionFinishedAt: 2026-03-21T15:46:41.089Z
-          executionStartedAt: 2026-03-21T15:46:33.082Z
+          executionFinishedAt: 2026-03-21T17:18:01.915Z
+          executionStartedAt: 2026-03-21T17:17:59.922Z
           type: code
           content: >-
             import pandas as pd
@@ -7209,9 +7210,9 @@ project:
 
             from mra_midas_skin_cancer_ml.utils.load_metadata_pred import load_pred_file
           metadata:
-            execution_start: 1774107993082
-            execution_millis: 8007
-            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+            execution_start: 1774113479922
+            execution_millis: 1993
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 607c3e5607e44c259885403d329e0b84
           blockGroup: 41bb23e0-c6b0-48e0-a259-5df1085f2629
           sortingKey: "000003"
@@ -7223,8 +7224,8 @@ project:
           sortingKey: "000004"
           contentHash: 78250d69
           executionCount: 3
-          executionFinishedAt: 2026-03-21T15:46:48.310Z
-          executionStartedAt: 2026-03-21T15:46:41.292Z
+          executionFinishedAt: 2026-03-21T17:18:07.572Z
+          executionStartedAt: 2026-03-21T17:18:01.962Z
           type: code
           content: >-
             # Merge image prediction results
@@ -7236,25 +7237,25 @@ project:
                 print(f"Displaying {split} split:")
                 display(df.head(3))
           metadata:
-            execution_start: 1774108001292
-            execution_millis: 7018
-            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+            execution_start: 1774113481962
+            execution_millis: 5610
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: f3b886fa49184468820c47095e321508
           blockGroup: 12b658f3f23345b69baa4da439aa8743
           sortingKey: "000005"
           contentHash: 313daeff
           executionCount: 4
-          executionFinishedAt: 2026-03-21T15:46:48.830Z
-          executionStartedAt: 2026-03-21T15:46:48.362Z
+          executionFinishedAt: 2026-03-21T17:18:08.239Z
+          executionStartedAt: 2026-03-21T17:18:07.633Z
           type: code
           content: >-
             metadata_pred_df = load_pred_file()
 
             metadata_pred_df.head()
           metadata:
-            execution_start: 1774108008362
-            execution_millis: 468
-            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+            execution_start: 1774113487633
+            execution_millis: 606
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 1f08f3694b0041cb8f04c5004008f737
           blockGroup: 238012795de54e6793947d61c4ad548f
           sortingKey: "000006"
@@ -7267,8 +7268,8 @@ project:
           sortingKey: "000007"
           contentHash: f14ce236
           executionCount: 6
-          executionFinishedAt: 2026-03-21T15:46:49.294Z
-          executionStartedAt: 2026-03-21T15:46:48.922Z
+          executionFinishedAt: 2026-03-21T17:18:08.892Z
+          executionStartedAt: 2026-03-21T17:18:08.352Z
           type: code
           content: >-
             # Load the metadata predictions
@@ -7278,16 +7279,16 @@ project:
 
             metadata_pred_df.head()
           metadata:
-            execution_start: 1774108008922
-            execution_millis: 372
-            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+            execution_start: 1774113488352
+            execution_millis: 540
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 4189a84065f646ea8d03aa3282a0554c
           blockGroup: fba214ab2b154149a5433d08571db4d2
           sortingKey: "000008"
           contentHash: fa79d57b
           executionCount: 5
-          executionFinishedAt: 2026-03-21T15:46:48.873Z
-          executionStartedAt: 2026-03-21T15:46:48.873Z
+          executionFinishedAt: 2026-03-21T17:18:08.303Z
+          executionStartedAt: 2026-03-21T17:18:08.302Z
           type: code
           content: >
             def multimodal_df():
@@ -7343,32 +7344,32 @@ project:
 
                 return fusion_df
           metadata:
-            execution_start: 1774108008873
-            execution_millis: 0
-            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+            execution_start: 1774113488302
+            execution_millis: 1
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 3b848308027c41f7bd408ed6173cdf4a
           blockGroup: f3c1f447b8dc4690aa605d058342d91b
           sortingKey: "000009"
           contentHash: 2dfab5ec
           executionCount: 7
-          executionFinishedAt: 2026-03-21T15:46:49.343Z
-          executionStartedAt: 2026-03-21T15:46:49.342Z
+          executionFinishedAt: 2026-03-21T17:18:08.953Z
+          executionStartedAt: 2026-03-21T17:18:08.953Z
           type: code
           content: >-
             fusion_df = multimodal_df()
 
             fusion_df.head()
           metadata:
-            execution_start: 1774108009342
-            execution_millis: 1
-            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+            execution_start: 1774113488953
+            execution_millis: 0
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 18cb9b790b54451e8eb027dd97eb4dfb
           blockGroup: d4a0fb8229cb42828745aa8d765157ab
           sortingKey: "000010"
           contentHash: d5498719
           executionCount: 8
-          executionFinishedAt: 2026-03-21T15:46:49.392Z
-          executionStartedAt: 2026-03-21T15:46:49.392Z
+          executionFinishedAt: 2026-03-21T17:18:09.002Z
+          executionStartedAt: 2026-03-21T17:18:09.002Z
           type: code
           content: >
             def gridsearch_fusion_weights():
@@ -7408,42 +7409,42 @@ project:
 
                 fusion_df["fusion_probability"] = (fusion_df[prob_cols] * best_weights).sum(axis=1)
           metadata:
-            execution_start: 1774108009392
+            execution_start: 1774113489002
             execution_millis: 0
-            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 40e0fa5d4217421ea8b4650e2c4b3af0
           blockGroup: 7219421b3ada4c02b9162f15c1b80d38
           sortingKey: "000011"
           contentHash: c78be091
           executionCount: 9
-          executionFinishedAt: 2026-03-21T15:46:50.060Z
-          executionStartedAt: 2026-03-21T15:46:49.442Z
+          executionFinishedAt: 2026-03-21T17:18:09.677Z
+          executionStartedAt: 2026-03-21T17:18:09.052Z
           type: code
           content: gridsearch_fusion_weights()
           metadata:
-            execution_start: 1774108009442
-            execution_millis: 618
-            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+            execution_start: 1774113489052
+            execution_millis: 625
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 852b98d178404a72a9666974f83aac53
           blockGroup: 1a11c06c5af14f70bf1d248cfbc62d2e
           sortingKey: "000012"
           contentHash: dfc31128
           executionCount: 11
-          executionFinishedAt: 2026-03-21T15:46:50.364Z
-          executionStartedAt: 2026-03-21T15:46:50.292Z
+          executionFinishedAt: 2026-03-21T17:18:09.844Z
+          executionStartedAt: 2026-03-21T17:18:09.772Z
           type: code
           content: plot_confusion_matrix(fusion_df, threshold=0.4)
           metadata:
-            execution_start: 1774108010292
+            execution_start: 1774113489772
             execution_millis: 72
-            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: c03d03528f834745a121163b92597dfa
           blockGroup: 6d050ef954264ea4ac141550a4766da5
           sortingKey: "000013"
-          contentHash: f645c999
+          contentHash: a3db8014
           executionCount: 12
-          executionFinishedAt: 2026-03-21T15:46:50.413Z
-          executionStartedAt: 2026-03-21T15:46:50.413Z
+          executionFinishedAt: 2026-03-21T17:18:09.893Z
+          executionStartedAt: 2026-03-21T17:18:09.892Z
           type: code
           content: >
             def evaluate_fusion(df, threshold=0.4):
@@ -7455,23 +7456,25 @@ project:
                 y_prob = df["fusion_probability"]
 
                 auc = roc_auc_score(y_true, y_prob)
+                recall = recall_score(y_true, y_prob >= threshold)
 
                 preds = (y_prob >= threshold).astype(int)
 
                 print("ROC AUC:", auc)
+                print("Recall:", recall)
                 print()
                 print(classification_report(y_true, preds))
           metadata:
-            execution_start: 1774108010413
-            execution_millis: 0
-            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+            execution_start: 1774113489892
+            execution_millis: 1
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 1e38da6c06a0457cad51be6a13a8d6e3
           blockGroup: ce27dfb31f6345b4849fefbdf181b355
           sortingKey: "000014"
           contentHash: "56e67559"
           executionCount: 10
-          executionFinishedAt: 2026-03-21T15:46:50.113Z
-          executionStartedAt: 2026-03-21T15:46:50.113Z
+          executionFinishedAt: 2026-03-21T17:18:09.722Z
+          executionStartedAt: 2026-03-21T17:18:09.722Z
           type: code
           content: >
             def plot_confusion_matrix(df, threshold=0.4):
@@ -7497,22 +7500,22 @@ project:
 
                 return cm
           metadata:
-            execution_start: 1774108010113
+            execution_start: 1774113489722
             execution_millis: 0
-            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 1a8fe82ebf1241c5a05ad90dd7e3240a
           blockGroup: 681cf52f002b45df8c1ed32c9dc148c7
           sortingKey: "000015"
           contentHash: 7d7846bc
           executionCount: 13
-          executionFinishedAt: 2026-03-21T15:46:50.473Z
-          executionStartedAt: 2026-03-21T15:46:50.472Z
+          executionFinishedAt: 2026-03-21T17:18:09.943Z
+          executionStartedAt: 2026-03-21T17:18:09.942Z
           type: code
           content: evaluate_fusion(fusion_df, threshold=0.4)
           metadata:
-            execution_start: 1774108010472
+            execution_start: 1774113489942
             execution_millis: 1
-            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 52afbad22a604356be7c1734f1487f72
           blockGroup: a6ce48ce4de24c09907abb2b0336a072
           sortingKey: "000016"
@@ -7523,10 +7526,10 @@ project:
         - id: 3e56a6c28f2b4f8ebfe71784f685b511
           blockGroup: 4bd355ac69f4436c888d26f97306ad77
           sortingKey: "000017"
-          contentHash: 65ee830a
+          contentHash: 5efdfa81
           executionCount: 14
-          executionFinishedAt: 2026-03-21T15:46:52.248Z
-          executionStartedAt: 2026-03-21T15:46:50.532Z
+          executionFinishedAt: 2026-03-21T17:18:11.749Z
+          executionStartedAt: 2026-03-21T17:18:09.993Z
           type: code
           content: >-
             # Define features and target
@@ -7605,7 +7608,7 @@ project:
 
             threshold, precision = find_threshold_for_target_recall(
                 y,
-                oof_stacked_probs,  # IMPORTANT: use OOF here
+                oof_stacked_probs,  
                 target_recall=0.90
             )
 
@@ -7636,9 +7639,9 @@ project:
 
             print(classification_report(y, fusion_df["stacked_prediction"]))
           metadata:
-            execution_start: 1774108010532
-            execution_millis: 1716
-            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+            execution_start: 1774113489993
+            execution_millis: 1756
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
       executionMode: block
       id: a97c997319e747ff9df34e3ac034c3ce
       isModule: false
