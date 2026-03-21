@@ -75,11 +75,11 @@ This project examines whether AI models can identify skin cancer using different
 ### Data Setup
 
 Download the dataset from the [MRA-MIDAS dataset](https://aimi.stanford.edu/datasets/mra-midas-Multimodal-Image-Dataset-for-AI-based-Skin-Cancer) page. 
-You must create an account, accept the Terms and Agreement, and copy the SAS URL provided on the download page. This SAS URL is required to securely download the data using azcopy. The SAS URL is time-limited; if it expires, request a new one from the dataset page
+You must create an account, accept the Terms and Agreement, and copy the SAS URL provided on the download page. This SAS URL is required to securely download the data using AzCopy. The SAS URL is time-limited; if it expires, request a new one from the dataset page.
 
 1.  Install AzCopy
 
-    Install and setup AzCopy by following the [official guide](https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10). Verify installation:
+    Install and set up AzCopy by following the [official guide](https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10). Verify installation:
 
     ```bash
     azcopy --version
@@ -128,7 +128,7 @@ You must create an account, accept the Terms and Agreement, and copy the SAS URL
 ### Data
 The `data/input/` folder stores the original metadata (`release_midas.xlsx`) and skin lesion image files.
 
-On the other hand, the `data/output/` folder stores the processed data and model outputs, which includes:
+On the other hand, the `data/output/` folder stores the processed data and model outputs, which include:
 - `data/output/image_model_output/`: Image model weights, predictions, evaluation metrics
 - `data/output/metadata_model_output/`:  Predictions from models trained on clinical metadata
 - `data/output/split_keys/`: Shared patient-level split keys for train, validation, and test sets
@@ -137,7 +137,7 @@ On the other hand, the `data/output/` folder stores the processed data and model
 The `notebooks/` folder contains notebooks covering data exploration, preprocessing, model training, and late fusion.
 
 ### Utils
-The `utils/` folder includes reusable helper functions for processing data (e.g., NLP tasks.) and merging predictions.
+The `utils/` folder includes reusable helper functions for processing data (e.g., NLP tasks) and merging predictions.
 
 ## Methodology
 
@@ -149,7 +149,7 @@ Image features are derived from the dermoscopic images associated with each skin
 
 ### Model Training
 The binary classification models (malignant or benign) are divided into three categories:
-- Image-based models: Trained and evaluated ResNet18, ResNet50, and EfficientNet on dermoscopic and clinical images (1 feet and 6 inch).
+- Image-based models: Trained and evaluated ResNet18, ResNet50, and EfficientNet on dermoscopic and clinical images (1 foot and 6 inches).
 - Metadata-only models: Trained and evaluated Logistic Regression, Decision Tree, Random Forest, and Gradient Boosting models on clinical metadata.
 - Multimodal models: Combined predictions from image-based and metadata-only models, with Logistic Regression used to determine optimal weights for the final prediction.
 
@@ -181,9 +181,9 @@ For more details, please visit [Stanford AIMI Shared Datasets](https://aimi.stan
 
 ## References
 
-- Chiou, A., Omiye, J. A., Gui, H., Swetter, S. M., Ko, J. M., Gastman, B., Arbesman, J., Cai, Z. R., Gevaert, O., Sadee, C., Rotemberg, V. M., Han, S. S., Tschandl, P., Dickman, M., Bailey, E., Bae, G., Bailin, P., Boldrick, J., Yekrang, K., ... Caroline, P. (2024). *MRA-MIDAS: Multimodal image dataset for AI-based skin cancer* [Data set]. Center for Artificial Intelligence in Medicine and Imaging, Stanford University. https://doi.org/10.71718/15nz-jv40
+- Chiou A, Omiye JA, Gui H, et al. MRA-MIDAS: Multimodal image dataset for AI-based skin cancer [dataset]. Center for Artificial Intelligence in Medicine and Imaging, Stanford University; 2024. doi:10.71718/15nz-jv40
 
-- Chiou, A., Omiye, J. A., Gui, H., Swetter, S. M., Ko, J. M., Gastman, B., Arbesman, J., Cai, Z. R., Gevaert, O., Sadee, C., Rotemberg, V. M., Han, S. S., Tschandl, P., Dickman, M., Bailey, E., Bae, G., Bailin, P., Boldrick, J., Yekrang, K., ... Caroline, P. (2024). *MRA-MIDAS: Multimodal image dataset for AI-based skin cancer* [Preprint]. medRxiv. https://doi.org/10.1101/2024.06.27.24309562
+- Chiou A, Omiye JA, Gui H, et al. MRA-MIDAS: Multimodal image dataset for AI-based skin cancer. medRxiv. 2024. doi:10.1101/2024.06.27.24309562
 
 ## License
 
