@@ -22,6 +22,7 @@ This project examines whether AI models can identify skin cancer using different
 ### Environment Setup
 
 1.  Clone the Repository
+
     Clone the repository to your desired folder:
 
     ```bash
@@ -30,6 +31,7 @@ This project examines whether AI models can identify skin cancer using different
     ```
 
 2.  Create and Activate a Virtual Environment
+
     From the project root, create a virtual environment:
 
     ```bash
@@ -51,6 +53,7 @@ This project examines whether AI models can identify skin cancer using different
     ```
 
 3.  Install Package and Dependencies
+
     Install this repository as a local package along with its dependencies:
 
     ```bash
@@ -58,11 +61,13 @@ This project examines whether AI models can identify skin cancer using different
     ```
 
 4.  Deactivate the Virtual Environment
+
     When you are done working:
 
     ```bash
     deactivate
     ```
+
 ### Data Setup
 
 Download the dataset from the [MRA-MIDAS dataset](https://aimi.stanford.edu/datasets/mra-midas-Multimodal-Image-Dataset-for-AI-based-Skin-Cancer) page. 
@@ -117,6 +122,7 @@ You must create an account, accept the Terms and Agreement, and copy the SAS URL
 ```
 
 1.  Data
+
     The `data/input/` folder stores the original clinical metadata (`release_midas.xlsx`) and skin lesion image files, while the `data/output/` stores the processed data and model outputs, including:
 
     - `data/output/image_model_output/`: Image model weights, predictions, evaluation metrics
@@ -124,9 +130,11 @@ You must create an account, accept the Terms and Agreement, and copy the SAS URL
     - `data/output/split_keys/`: Shared patient-level split keys for train, validation, and test sets
 
 2.  Notebooks
+
     The `notebooks/` folder contains Jupyter notebooks covering data exploration, preprocessing, model training, and late fusion.
 
 3.  Utils
+
     The `utils/` folder includes reusable helper functions for processing data (e.g., NLP tasks.) and merging predictions.
 
 ## Methodology
