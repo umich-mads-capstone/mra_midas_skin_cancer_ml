@@ -2,7 +2,7 @@ environment: {}
 execution: {}
 metadata:
   createdAt: 2026-02-04T14:56:27.465Z
-  modifiedAt: 2026-03-21T17:22:36.125Z
+  modifiedAt: 2026-03-21T18:26:28.026Z
 project:
   id: 815c7d4b397544eeb19c2b986faab6b6
   integrations:
@@ -7165,16 +7165,16 @@ project:
           sortingKey: "000000"
           contentHash: 2f19d1f9
           executionCount: 1
-          executionFinishedAt: 2026-03-21T17:17:59.873Z
-          executionStartedAt: 2026-03-21T17:17:59.872Z
+          executionFinishedAt: 2026-03-21T18:22:38.942Z
+          executionStartedAt: 2026-03-21T18:22:38.942Z
           type: code
           content: >-
             %load_ext autoreload
 
             %autoreload 2
           metadata:
-            execution_start: 1774113479872
-            execution_millis: 1
+            execution_start: 1774117358942
+            execution_millis: 0
             execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 4482108e65e74155890622e19d0eac30
           blockGroup: 56daf293-99fe-440c-9c98-de934cdf6535
@@ -7187,8 +7187,8 @@ project:
           sortingKey: "000002"
           contentHash: 5d1c301b
           executionCount: 2
-          executionFinishedAt: 2026-03-21T17:18:01.915Z
-          executionStartedAt: 2026-03-21T17:17:59.922Z
+          executionFinishedAt: 2026-03-21T18:22:40.756Z
+          executionStartedAt: 2026-03-21T18:22:39.002Z
           type: code
           content: >-
             import pandas as pd
@@ -7210,8 +7210,8 @@ project:
 
             from mra_midas_skin_cancer_ml.utils.load_metadata_pred import load_pred_file
           metadata:
-            execution_start: 1774113479922
-            execution_millis: 1993
+            execution_start: 1774117359002
+            execution_millis: 1754
             execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 607c3e5607e44c259885403d329e0b84
           blockGroup: 41bb23e0-c6b0-48e0-a259-5df1085f2629
@@ -7224,8 +7224,8 @@ project:
           sortingKey: "000004"
           contentHash: 78250d69
           executionCount: 3
-          executionFinishedAt: 2026-03-21T17:18:07.572Z
-          executionStartedAt: 2026-03-21T17:18:01.962Z
+          executionFinishedAt: 2026-03-21T18:22:46.293Z
+          executionStartedAt: 2026-03-21T18:22:40.812Z
           type: code
           content: >-
             # Merge image prediction results
@@ -7237,39 +7237,65 @@ project:
                 print(f"Displaying {split} split:")
                 display(df.head(3))
           metadata:
-            execution_start: 1774113481962
-            execution_millis: 5610
+            execution_start: 1774117360812
+            execution_millis: 5481
             execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: f3b886fa49184468820c47095e321508
           blockGroup: 12b658f3f23345b69baa4da439aa8743
           sortingKey: "000005"
           contentHash: 313daeff
           executionCount: 4
-          executionFinishedAt: 2026-03-21T17:18:08.239Z
-          executionStartedAt: 2026-03-21T17:18:07.633Z
+          executionFinishedAt: 2026-03-21T18:22:46.871Z
+          executionStartedAt: 2026-03-21T18:22:46.342Z
           type: code
           content: >-
             metadata_pred_df = load_pred_file()
 
             metadata_pred_df.head()
           metadata:
-            execution_start: 1774113487633
-            execution_millis: 606
+            execution_start: 1774117366342
+            execution_millis: 529
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
+        - id: 6192b635eade4339b105cdc9d4b0928b
+          blockGroup: 2363e94189994b6aaf316de25edf928e
+          sortingKey: "000006"
+          contentHash: f70f7e3b
+          executionCount: 6
+          executionFinishedAt: 2026-03-21T18:22:46.962Z
+          executionStartedAt: 2026-03-21T18:22:46.962Z
+          type: code
+          content: >-
+            def evaluate_predictions(y_true, y_prob, threshold=0.4):
+                y_pred = (y_prob >= threshold).astype(int)
+
+                print(f"Threshold: {threshold}")
+                print(f"ROC AUC: {roc_auc_score(y_true, y_prob):.4f}")
+                print(f"Precision: {precision_score(y_true, y_pred):.4f}")
+                print(f"Recall: {recall_score(y_true, y_pred):.4f}")
+                print("\nConfusion Matrix:")
+                print(confusion_matrix(y_true, y_pred))
+                print("\nClassification Report:")
+                print(classification_report(y_true, y_pred))
+
+                return y_pred
+          metadata:
+            execution_start: 1774117366962
+            execution_millis: 0
             execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 1f08f3694b0041cb8f04c5004008f737
           blockGroup: 238012795de54e6793947d61c4ad548f
-          sortingKey: "000006"
+          sortingKey: "000007"
           type: text-cell-h1
           content: "Model #1 - Gridsearch on Optimal Fusion Weights"
           metadata:
             formattedRanges: []
         - id: 8d9fd4a8444045d289110e35df236000
           blockGroup: c7933cb8ccc6448c944b54642e1424ac
-          sortingKey: "000007"
+          sortingKey: "000008"
           contentHash: f14ce236
-          executionCount: 6
-          executionFinishedAt: 2026-03-21T17:18:08.892Z
-          executionStartedAt: 2026-03-21T17:18:08.352Z
+          executionCount: 7
+          executionFinishedAt: 2026-03-21T18:22:47.497Z
+          executionStartedAt: 2026-03-21T18:22:47.012Z
           type: code
           content: >-
             # Load the metadata predictions
@@ -7279,16 +7305,16 @@ project:
 
             metadata_pred_df.head()
           metadata:
-            execution_start: 1774113488352
-            execution_millis: 540
+            execution_start: 1774117367012
+            execution_millis: 485
             execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 4189a84065f646ea8d03aa3282a0554c
           blockGroup: fba214ab2b154149a5433d08571db4d2
-          sortingKey: "000008"
+          sortingKey: "000009"
           contentHash: fa79d57b
           executionCount: 5
-          executionFinishedAt: 2026-03-21T17:18:08.303Z
-          executionStartedAt: 2026-03-21T17:18:08.302Z
+          executionFinishedAt: 2026-03-21T18:22:46.912Z
+          executionStartedAt: 2026-03-21T18:22:46.912Z
           type: code
           content: >
             def multimodal_df():
@@ -7344,148 +7370,148 @@ project:
 
                 return fusion_df
           metadata:
-            execution_start: 1774113488302
-            execution_millis: 1
+            execution_start: 1774117366912
+            execution_millis: 0
             execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 3b848308027c41f7bd408ed6173cdf4a
           blockGroup: f3c1f447b8dc4690aa605d058342d91b
-          sortingKey: "000009"
+          sortingKey: "000010"
           contentHash: 2dfab5ec
-          executionCount: 7
-          executionFinishedAt: 2026-03-21T17:18:08.953Z
-          executionStartedAt: 2026-03-21T17:18:08.953Z
+          executionCount: 8
+          executionFinishedAt: 2026-03-21T18:22:47.554Z
+          executionStartedAt: 2026-03-21T18:22:47.542Z
           type: code
           content: >-
             fusion_df = multimodal_df()
 
             fusion_df.head()
           metadata:
-            execution_start: 1774113488953
+            execution_start: 1774117367542
+            execution_millis: 12
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
+        - id: 0850f9618bec46cd91744101a2d74d2c
+          blockGroup: 89cfcf210b90487a867285d6359bd940
+          sortingKey: "000011"
+          contentHash: 2eafbab2
+          executionCount: 9
+          executionFinishedAt: 2026-03-21T18:22:47.603Z
+          executionStartedAt: 2026-03-21T18:22:47.603Z
+          type: code
+          content: >-
+            fusion_df["split"] = fusion_df["split"].str.lower()
+
+
+            train_df = fusion_df[fusion_df["split"] == "train"].copy()
+
+            val_df   = fusion_df[fusion_df["split"] == "val"].copy()
+
+            test_df  = fusion_df[fusion_df["split"] == "test"].copy()
+
+
+            print(len(train_df), len(val_df), len(test_df))
+          metadata:
+            execution_start: 1774117367603
             execution_millis: 0
             execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 18cb9b790b54451e8eb027dd97eb4dfb
           blockGroup: d4a0fb8229cb42828745aa8d765157ab
-          sortingKey: "000010"
-          contentHash: d5498719
-          executionCount: 8
-          executionFinishedAt: 2026-03-21T17:18:09.002Z
-          executionStartedAt: 2026-03-21T17:18:09.002Z
+          sortingKey: "000012"
+          contentHash: fec4306e
+          executionCount: 10
+          executionFinishedAt: 2026-03-21T18:22:47.652Z
+          executionStartedAt: 2026-03-21T18:22:47.652Z
           type: code
           content: >
-            def gridsearch_fusion_weights():
+            def grid_search_weights(df, prob_cols, y_col="midas_path_binary"):
                 """
                 Gridsearch the optimal fusion weights by ROC AUC
                 """
 
-                prob_cols = [
-                    "1ft_malignant_probability",
-                    "6in_malignant_probability",
-                    "dscope_malignant_probability",
-                    "malignant_probability"
-                ]
-
-                y = fusion_df["midas_path_binary"]
+                y_true = df[y_col].values
 
                 best_auc = 0
                 best_weights = None
 
-                for w1 in np.arange(0, 1.01, 0.1):
-                    for w2 in np.arange(0, 1.01 - w1, 0.1):
-                        for w3 in np.arange(0, 1.01 - w1 - w2, 0.1):
+                weight_grid = np.linspace(0, 1, 6)
 
-                            w4 = 1 - w1 - w2 - w3
-                            weights = np.array([w1, w2, w3, w4])
+                for w1 in weight_grid:
+                    for w2 in weight_grid:
+                        for w3 in weight_grid:
+                            for w4 in weight_grid:
+                                weights = np.array([w1, w2, w3, w4])
+                                if weights.sum() == 0:
+                                    continue
+                                weights = weights / weights.sum()
 
-                            p = (fusion_df[prob_cols] * weights).sum(axis=1)
+                                probs = df[prob_cols].values @ weights
+                                auc = roc_auc_score(y_true, probs)
 
-                            auc = roc_auc_score(y, p)
-
-                            if auc > best_auc:
-                                best_auc = auc
-                                best_weights = weights
+                                if auc > best_auc:
+                                    best_auc = auc
+                                    best_weights = weights
 
                 print("Best AUC:", best_auc)
                 print("Best weights:", best_weights)
 
-                fusion_df["fusion_probability"] = (fusion_df[prob_cols] * best_weights).sum(axis=1)
+                return best_weights
           metadata:
-            execution_start: 1774113489002
+            execution_start: 1774117367652
             execution_millis: 0
             execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 40e0fa5d4217421ea8b4650e2c4b3af0
           blockGroup: 7219421b3ada4c02b9162f15c1b80d38
-          sortingKey: "000011"
-          contentHash: c78be091
-          executionCount: 9
-          executionFinishedAt: 2026-03-21T17:18:09.677Z
-          executionStartedAt: 2026-03-21T17:18:09.052Z
-          type: code
-          content: gridsearch_fusion_weights()
-          metadata:
-            execution_start: 1774113489052
-            execution_millis: 625
-            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
-        - id: 852b98d178404a72a9666974f83aac53
-          blockGroup: 1a11c06c5af14f70bf1d248cfbc62d2e
-          sortingKey: "000012"
-          contentHash: dfc31128
-          executionCount: 11
-          executionFinishedAt: 2026-03-21T17:18:09.844Z
-          executionStartedAt: 2026-03-21T17:18:09.772Z
-          type: code
-          content: plot_confusion_matrix(fusion_df, threshold=0.4)
-          metadata:
-            execution_start: 1774113489772
-            execution_millis: 72
-            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
-        - id: c03d03528f834745a121163b92597dfa
-          blockGroup: 6d050ef954264ea4ac141550a4766da5
           sortingKey: "000013"
-          contentHash: a3db8014
-          executionCount: 12
-          executionFinishedAt: 2026-03-21T17:18:09.893Z
-          executionStartedAt: 2026-03-21T17:18:09.892Z
+          contentHash: 9fb90262
+          executionCount: 11
+          executionFinishedAt: 2026-03-21T18:22:49.555Z
+          executionStartedAt: 2026-03-21T18:22:47.702Z
           type: code
-          content: >
-            def evaluate_fusion(df, threshold=0.4):
-                """
-                Evaluate fusion model performance.
-                """
+          content: >-
+            train_val_df = pd.concat([train_df, val_df])
 
-                y_true = df["midas_path_binary"]
-                y_prob = df["fusion_probability"]
 
-                auc = roc_auc_score(y_true, y_prob)
-                recall = recall_score(y_true, y_prob >= threshold)
+            prob_cols = [
+                "1ft_malignant_probability",
+                "6in_malignant_probability",
+                "dscope_malignant_probability",
+                "malignant_probability"
+            ]
 
-                preds = (y_prob >= threshold).astype(int)
 
-                print("ROC AUC:", auc)
-                print("Recall:", recall)
-                print()
-                print(classification_report(y_true, preds))
+            best_weights = grid_search_weights(train_val_df, prob_cols)
           metadata:
-            execution_start: 1774113489892
-            execution_millis: 1
+            execution_start: 1774117367702
+            execution_millis: 1853
             execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
-        - id: 1e38da6c06a0457cad51be6a13a8d6e3
-          blockGroup: ce27dfb31f6345b4849fefbdf181b355
+        - id: c4647ee24d734ed7bb6b7d2346d5c085
+          blockGroup: c4298f9d70b5499ebe4e73eecc6e0ef5
           sortingKey: "000014"
-          contentHash: "56e67559"
-          executionCount: 10
-          executionFinishedAt: 2026-03-21T17:18:09.722Z
-          executionStartedAt: 2026-03-21T17:18:09.722Z
+          contentHash: 9464f525
+          executionCount: 16
+          executionFinishedAt: 2026-03-21T18:22:49.812Z
+          executionStartedAt: 2026-03-21T18:22:49.812Z
           type: code
-          content: >
+          content: >-
             def plot_confusion_matrix(df, threshold=0.4):
                 """
                 Create and display confusion matrix for fusion model.
                 """
 
-                y_true = df["midas_path_binary"].astype(int)
-                y_prob = df["fusion_probability"]
+                df = df.copy()
 
+                # Drop missing values
+                df = df.dropna(subset=["midas_path_binary", "fusion_probability"])
+
+                # Force binary format
+                y_true = df["midas_path_binary"].astype(int).values
+                y_prob = df["fusion_probability"].astype(float).values
+
+                # Convert to predictions
                 y_pred = (y_prob >= threshold).astype(int)
+
+                # Debug safety checks
+                assert set(np.unique(y_true)).issubset({0, 1}), "y_true not binary"
+                assert len(y_true) == len(y_pred), "Length mismatch"
 
                 cm = confusion_matrix(y_true, y_pred)
 
@@ -7500,42 +7526,132 @@ project:
 
                 return cm
           metadata:
-            execution_start: 1774113489722
+            execution_start: 1774117369812
             execution_millis: 0
             execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
-        - id: 1a8fe82ebf1241c5a05ad90dd7e3240a
-          blockGroup: 681cf52f002b45df8c1ed32c9dc148c7
+        - id: 4b2f040d97ce4cc2a704dfb3445a8f1a
+          blockGroup: 9a9872fae9224fdd8518fd0e3a0f1634
           sortingKey: "000015"
-          contentHash: 7d7846bc
-          executionCount: 13
-          executionFinishedAt: 2026-03-21T17:18:09.943Z
-          executionStartedAt: 2026-03-21T17:18:09.942Z
+          contentHash: 8e249add
+          executionCount: 12
+          executionFinishedAt: 2026-03-21T18:22:49.602Z
+          executionStartedAt: 2026-03-21T18:22:49.602Z
           type: code
-          content: evaluate_fusion(fusion_df, threshold=0.4)
+          content: >-
+            def apply_fusion(df, prob_cols, weights):
+                df = df.copy()
+                df["fusion_probability"] = df[prob_cols].values @ weights
+                return df
+
+            train_df = apply_fusion(train_df, prob_cols, best_weights)
+
+            val_df   = apply_fusion(val_df, prob_cols, best_weights)
+
+            test_df  = apply_fusion(test_df, prob_cols, best_weights)
           metadata:
-            execution_start: 1774113489942
-            execution_millis: 1
+            execution_start: 1774117369602
+            execution_millis: 0
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
+        - id: 852b98d178404a72a9666974f83aac53
+          blockGroup: 1a11c06c5af14f70bf1d248cfbc62d2e
+          sortingKey: "000016"
+          contentHash: 7ace19bc
+          executionCount: 17
+          executionFinishedAt: 2026-03-21T18:22:49.940Z
+          executionStartedAt: 2026-03-21T18:22:49.862Z
+          type: code
+          content: plot_confusion_matrix(test_df, threshold=val_threshold)
+          metadata:
+            execution_start: 1774117369862
+            execution_millis: 78
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
+        - id: c2ab8652f4c349caac27b0a08cc522f8
+          blockGroup: eaa80bbb341e453a86b3322683246fb6
+          sortingKey: "000017"
+          contentHash: 1edf5942
+          executionCount: 13
+          executionFinishedAt: 2026-03-21T18:22:49.652Z
+          executionStartedAt: 2026-03-21T18:22:49.652Z
+          type: code
+          content: >-
+            def find_threshold_for_target_recall(y_true, y_prob, target_recall=0.95):
+                thresholds = np.linspace(1, 0, 200)
+
+                best_threshold = 0.4
+
+                for t in thresholds:
+                    y_pred = (y_prob >= t).astype(int)
+                    tp = ((y_true == 1) & (y_pred == 1)).sum()
+                    fn = ((y_true == 1) & (y_pred == 0)).sum()
+
+                    recall = tp / (tp + fn + 1e-8)
+
+                    if recall >= target_recall:
+                        best_threshold = t
+                        break
+
+                print(f"Selected threshold: {best_threshold:.4f}")
+                return best_threshold
+          metadata:
+            execution_start: 1774117369652
+            execution_millis: 0
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
+        - id: 1983207c8381440e8f54e1a397643009
+          blockGroup: a2d612f7e1e1494e959cf7a465fe2eb5
+          sortingKey: "000018"
+          contentHash: 4b9e741b
+          executionCount: 14
+          executionFinishedAt: 2026-03-21T18:22:49.712Z
+          executionStartedAt: 2026-03-21T18:22:49.712Z
+          type: code
+          content: >-
+            val_threshold = find_threshold_for_target_recall(
+                val_df["midas_path_binary"].values,
+                val_df["fusion_probability"].values,
+                target_recall=0.96
+            )
+          metadata:
+            execution_start: 1774117369712
+            execution_millis: 0
+            execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
+        - id: 00164acce38342538a0cbe583040689c
+          blockGroup: b12d835805c14451b2707f428aefa635
+          sortingKey: "000019"
+          contentHash: e76a4d4f
+          executionCount: 15
+          executionFinishedAt: 2026-03-21T18:22:49.762Z
+          executionStartedAt: 2026-03-21T18:22:49.762Z
+          type: code
+          content: >-
+            evaluate_predictions(
+                test_df["midas_path_binary"].values,
+                test_df["fusion_probability"].values,
+                threshold=val_threshold
+            )
+          metadata:
+            execution_start: 1774117369762
+            execution_millis: 0
             execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
         - id: 52afbad22a604356be7c1734f1487f72
           blockGroup: a6ce48ce4de24c09907abb2b0336a072
-          sortingKey: "000016"
+          sortingKey: "000020"
           type: text-cell-h1
           content: "Model #2 - Stacking Model"
           metadata:
             formattedRanges: []
         - id: 3e56a6c28f2b4f8ebfe71784f685b511
           blockGroup: 4bd355ac69f4436c888d26f97306ad77
-          sortingKey: "000017"
-          contentHash: 5efdfa81
-          executionCount: 14
-          executionFinishedAt: 2026-03-21T17:18:11.749Z
-          executionStartedAt: 2026-03-21T17:18:09.993Z
+          sortingKey: "000021"
+          contentHash: 8e3047b2
+          executionCount: 18
+          executionFinishedAt: 2026-03-21T18:22:50.008Z
+          executionStartedAt: 2026-03-21T18:22:49.982Z
           type: code
           content: >-
             # Define features and target
 
 
-            feature_cols = [
+            FEATURE_COLS = [
                 "1ft_malignant_probability",
                 "6in_malignant_probability",
                 "dscope_malignant_probability",
@@ -7543,104 +7659,125 @@ project:
             ]
 
 
-            X = fusion_df[feature_cols]
+            TARGET = "midas_path_binary"
 
-            y = fusion_df["midas_path_binary"].values
+
+            # Split data
+
+
+            fusion_df["split"] = fusion_df["split"].str.lower()
+
+
+            train_df = fusion_df[fusion_df["split"] == "train"].copy()
+
+            val_df   = fusion_df[fusion_df["split"] == "val"].copy()
+
+            test_df  = fusion_df[fusion_df["split"] == "test"].copy()
+
 
 
             # Out-of-fold stacking
 
 
-            def generate_oof_stacking(X, y, n_splits=5):
-                """
-                Generates out-of-fold predictions using logistic regression for stacking.
-                """
+            def generate_oof_predictions(df, feature_cols, target, n_splits=5):
+                X = df[feature_cols].values
+                y = df[target].values
+
                 skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=42)
-                
-                oof_preds = np.zeros(len(X))
-                
-                for fold, (train_idx, val_idx) in enumerate(skf.split(X, y)):
-                    X_train, X_val = X.iloc[train_idx], X.iloc[val_idx]
+                oof_preds = np.zeros(len(df))
+
+                for train_idx, val_idx in skf.split(X, y):
+                    X_train, X_val = X[train_idx], X[val_idx]
                     y_train = y[train_idx]
-                    
+
                     model = LogisticRegression(max_iter=1000)
                     model.fit(X_train, y_train)
-                    
+
                     oof_preds[val_idx] = model.predict_proba(X_val)[:, 1]
-                    
+
                 return oof_preds
 
-            oof_stacked_probs = generate_oof_stacking(X, y)
-
-
-            # Train final model
-
-
-            final_meta_model = LogisticRegression(max_iter=1000)
-
-            final_meta_model.fit(X, y)
-
-
-            fusion_df["stacked_probability"] = final_meta_model.predict_proba(X)[:, 1]
-
-
-            # Recall-targeted threshold
-
-
-            def find_threshold_for_target_recall(y_true, probs, target_recall=0.90):
-                thresholds = np.linspace(0.0, 1.0, 1000)
-                
-                best_threshold = 0.5
-                best_precision = 0
-                
-                for t in thresholds:
-                    preds = (probs >= t).astype(int)
-                    recall = recall_score(y_true, preds)
-                    
-                    if recall >= target_recall:
-                        precision = precision_score(y_true, preds, zero_division=0)
-                        
-                        if precision > best_precision:
-                            best_precision = precision
-                            best_threshold = t
-                            
-                return best_threshold, best_precision
-
-            threshold, precision = find_threshold_for_target_recall(
-                y,
-                oof_stacked_probs,  
-                target_recall=0.90
+            train_df["stacking_oof"] = generate_oof_predictions(
+                train_df,
+                FEATURE_COLS,
+                TARGET
             )
 
 
-            print(f"Selected Threshold: {threshold:.4f}")
 
-            print(f"Precision at Target Recall: {precision:.4f}")
-
-
-            # Final predictions
+            # Train meta model
 
 
-            fusion_df["stacked_prediction"] = (
-                fusion_df["stacked_probability"] >= threshold
-            ).astype(int)
+            meta_model = LogisticRegression(max_iter=1000)
+
+            meta_model.fit(
+                train_df[FEATURE_COLS],
+                train_df[TARGET]
+            )
 
 
-            fusion_df["stacked_prediction_label"] = fusion_df["stacked_prediction"].map({
-                1: "malignant",
-                0: "benign"
-            })
+            # Apply to val and test splits
 
 
-            # Model eval
+            val_df["stacking_probability"] = meta_model.predict_proba(
+                val_df[FEATURE_COLS]
+            )[:, 1]
 
 
-            print("\nStacked Model Performance:")
+            test_df["stacking_probability"] = meta_model.predict_proba(
+                test_df[FEATURE_COLS]
+            )[:, 1]
 
-            print(classification_report(y, fusion_df["stacked_prediction"]))
+
+            # Recall-targeted threshold on val only
+
+
+            def find_threshold_for_target_recall(y_true, y_prob, target_recall=0.95):
+                thresholds = np.linspace(1, 0, 200)
+
+                for t in thresholds:
+                    y_pred = (y_prob >= t).astype(int)
+                    tp = ((y_true == 1) & (y_pred == 1)).sum()
+                    fn = ((y_true == 1) & (y_pred == 0)).sum()
+
+                    recall = tp / (tp + fn + 1e-8)
+
+                    if recall >= target_recall:
+                        print(f"Selected threshold: {t:.4f}")
+                        return t
+
+                return 0.0
+
+            stacking_threshold = find_threshold_for_target_recall(
+                val_df[TARGET].values,
+                val_df["stacking_probability"].values,
+                target_recall=0.95
+            )
+
+
+            # Evaluation on the test only
+
+
+            def evaluate_predictions(y_true, y_prob, threshold):
+                y_pred = (y_prob >= threshold).astype(int)
+
+                print(f"Threshold: {threshold:.4f}")
+                print(f"ROC AUC: {roc_auc_score(y_true, y_prob):.4f}")
+                print(f"Recall: {recall_score(y_true, y_pred):.4f}")
+                print(f"Precision: {precision_score(y_true, y_pred):.4f}")
+                print("\nConfusion Matrix:")
+                print(confusion_matrix(y_true, y_pred))
+                print("\nClassification Report:")
+                print(classification_report(y_true, y_pred))
+
+            evaluate_predictions(
+                test_df[TARGET].values,
+                test_df["stacking_probability"].values,
+                stacking_threshold
+            )
           metadata:
-            execution_start: 1774113489993
-            execution_millis: 1756
+            execution_start: 1774117369982
+            execution_millis: 26
             execution_context_id: a1165b12-045d-4070-aa1e-a9a8b652f267
       executionMode: block
       id: a97c997319e747ff9df34e3ac034c3ce
