@@ -1,5 +1,7 @@
 # Multimodal Skin Cancer Detection
 
+![Multimodal Skin Cancer Detection](assets/flowchart.png)
+
 ## Table of Contents
 - [About the Project](#about-the-project)
 - [Getting Started](#getting-started)
