@@ -9,7 +9,7 @@
 - [Project Structure](#project-structure)
 - [Methodology](#methodology)
 - [Model Results](#model-results)
-- [Data Source and Usage](#data-source-and-usage)
+- [Dataset Access](#data-access)
 - [References](#references)
 - [License](#license)
 
@@ -170,7 +170,7 @@ The top-performing metadata model was a Logistic Regression model using nine SVD
 ### Multimodal Model
 To be updated.
 
-## Data Source and Usage
+## Data Access
 This project uses the [MRA-MIDAS dataset](https://aimi.stanford.edu/datasets/mra-midas-Multimodal-Image-Dataset-for-AI-based-Skin-Cancer) (Multimodal Image Dataset for AI-based Skin Cancer) provided by the Stanford Center for Artificial Intelligence in Medicine and Imaging (AIMI). The dataset contains paired clinical and dermoscopic images of skin lesions, along with biopsy-confirmed diagnoses and associated clinical metadata. 
 
 The dataset is owned and curated by Stanford AIMI and is made available for non-commercial research purposes through Stanford’s data portal. Users are expected to acknowledge Stanford AIMI in publications, presentations, and other outputs using the following language:
