@@ -115,7 +115,6 @@ You must create an account, accept the Terms and Agreement, and copy the SAS URL
 │   └── output
 │       ├── image_model_output
 │       ├── metadata_model_output
-│       ├── split_images
 │       └── split_keys
 ├── notebooks
 │   ├── __init__.py
