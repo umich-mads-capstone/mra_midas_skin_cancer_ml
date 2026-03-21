@@ -1,7 +1,7 @@
 # Multimodal Skin Cancer Detection
 
 ## Table of Contents
-- [About](#about)
+- [About the Project](#about-the-project)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Environment Setup](#environment-setup)
@@ -13,7 +13,7 @@
 - [References](#references)
 - [License](#license)
 
-## About
+## About the Project
 This project examines whether AI models can identify skin cancer using different types of input data. It compares image-only models, metadata-only models, and models that combine clinical and dermoscopic images with clinical metadata to assess differences in performance and reliability. The study also investigates which data sources provide the strongest predictive signal and whether combining inputs offers meaningful improvements.
 
 ## Getting Started
@@ -181,8 +181,8 @@ For more details, please visit [Stanford AIMI Shared Datasets](https://aimi.stan
 
 ## References
 
-1. Chiou A, Omiye JA, Gui H, et al. *MRA-MIDAS: Multimodal Image Dataset for AI-based Skin Cancer*. Center for Artificial Intelligence in Medicine and Imaging (AIMI), Stanford University; 2024. DOI: [10.71718/15nz-jv40](https://doi.org/10.71718/15nz-jv40).
-2. Chiou A, Omiye JA, Gui H, et al. *MRA-MIDAS: Multimodal Image Dataset for AI-based Skin Cancer*. medRxiv; 2024. DOI: [10.1101/2024.06.27.24309562](https://doi.org/10.1101/2024.06.27.24309562).
+Chiou, A., Omiye, J. A., Gui, H., Swetter, S. M., Ko, J. M., Gastman, B., Arbesman, J., Cai, Z. R., Gevaert, O., Sadee, C., Rotemberg, V. M., Han, S. S., Tschandl, P., Dickman, M., Bailey, E., Bae, G., Bailin, P., Boldrick, J., Yekrang, K., ... Caroline, P. (2024). *MRA-MIDAS: Multimodal image dataset for AI-based skin cancer* [Data set]. Center for Artificial Intelligence in Medicine and Imaging, Stanford University. https://doi.org/10.71718/15nz-jv40
+Chiou, A., Omiye, J. A., Gui, H., Swetter, S. M., Ko, J. M., Gastman, B., Arbesman, J., Cai, Z. R., Gevaert, O., Sadee, C., Rotemberg, V. M., Han, S. S., Tschandl, P., Dickman, M., Bailey, E., Bae, G., Bailin, P., Boldrick, J., Yekrang, K., ... Caroline, P. (2024). *MRA-MIDAS: Multimodal image dataset for AI-based skin cancer* [Preprint]. medRxiv. https://doi.org/10.1101/2024.06.27.24309562
 
 ## License
 
