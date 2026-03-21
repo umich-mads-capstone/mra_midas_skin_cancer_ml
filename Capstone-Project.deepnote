@@ -2,7 +2,7 @@ environment: {}
 execution: {}
 metadata:
   createdAt: 2026-02-04T14:56:27.465Z
-  modifiedAt: 2026-03-15T17:03:53.355Z
+  modifiedAt: 2026-03-21T15:51:13.733Z
 project:
   id: 815c7d4b397544eeb19c2b986faab6b6
   integrations:
@@ -144,70 +144,9 @@ project:
           type: markdown
           content: "# Split Each Image Set Into Train/Val/Test"
           metadata: {}
-        - id: 3dca9a7aa9574277aded942f534073ef
-          blockGroup: 776a3df5-90d5-4d78-ac4d-c633acb1276d
-          sortingKey: "000006"
-          type: code
-          content: >-
-            def create_image_folders(result_dict, raw_images_dir, output_root_dir):
-                """
-                Creates folders and copies images into train/val/test.
-                Match case-insensitive filenames (.jpg/.jpeg/_cropped.jpg/_cropped.jpeg)
-                """
-
-                raw_images_dir = Path(raw_images_dir)
-                output_root_dir = Path(output_root_dir)
-
-                all_files_map = {
-                    p.name.lower(): p for p in raw_images_dir.iterdir() if p.is_file()
-                }
-
-                for dist, df in result_dict.items():
-                    dist_dir = output_root_dir / dist
-
-                    for split in ["train", "val", "test"]:
-                        for label in ["benign", "malignant"]:
-                            (dist_dir / split / label).mkdir(parents=True, exist_ok=True)
-
-                    for row in df.itertuples(index=False):
-                        excel_name = row.midas_file_name.lower()
-                        label = row.midas_path_binary
-                        split = row.split
-
-                        stem = Path(excel_name).stem  # base without extension
-
-                        candidates = [
-                            f"{stem}.jpg",
-                            f"{stem}.jpeg",
-                            f"{stem}_cropped.jpg",
-                            f"{stem}_cropped.jpeg",
-                        ]
-
-                        matched_file = None
-                        for candidate in candidates:
-                            if candidate in all_files_map:
-                                matched_file = all_files_map[candidate]
-                                break
-
-                        if matched_file is None:
-                            print(f"No file found for: {row.midas_file_name}")
-                            continue
-
-                        dst_path = dist_dir / split / label / matched_file.name
-                        shutil.copy2(matched_file, dst_path)
-
-                count_files_in_image_folders(output_root_dir)
-
-
-            create_image_folders(
-                result_dict,
-                get_data_dir() / "input" / "raw_images",
-                get_data_dir() / "output" / "split_images",
-            )
-          metadata: {}
         - id: fa762727e6c34d0d8c4bcfefa7ac4b06
           blockGroup: 6e7f8ae1-b397-4972-8af9-67279093976f
-          sortingKey: "000007"
+          sortingKey: "000006"
           type: code
           content: >-
             def split_train_test_by_lesion(dist_dict, test_size=0.2, random_state=42):
@@ -271,6 +210,67 @@ project:
 
 
             result_dict = split_train_test_by_lesion(dist_dict)
+          metadata: {}
+        - id: 3dca9a7aa9574277aded942f534073ef
+          blockGroup: 776a3df5-90d5-4d78-ac4d-c633acb1276d
+          sortingKey: "000007"
+          type: code
+          content: >-
+            def create_image_folders(result_dict, raw_images_dir, output_root_dir):
+                """
+                Creates folders and copies images into train/val/test.
+                Match case-insensitive filenames (.jpg/.jpeg/_cropped.jpg/_cropped.jpeg)
+                """
+
+                raw_images_dir = Path(raw_images_dir)
+                output_root_dir = Path(output_root_dir)
+
+                all_files_map = {
+                    p.name.lower(): p for p in raw_images_dir.iterdir() if p.is_file()
+                }
+
+                for dist, df in result_dict.items():
+                    dist_dir = output_root_dir / dist
+
+                    for split in ["train", "val", "test"]:
+                        for label in ["benign", "malignant"]:
+                            (dist_dir / split / label).mkdir(parents=True, exist_ok=True)
+
+                    for row in df.itertuples(index=False):
+                        excel_name = row.midas_file_name.lower()
+                        label = row.midas_path_binary
+                        split = row.split
+
+                        stem = Path(excel_name).stem  # base without extension
+
+                        candidates = [
+                            f"{stem}.jpg",
+                            f"{stem}.jpeg",
+                            f"{stem}_cropped.jpg",
+                            f"{stem}_cropped.jpeg",
+                        ]
+
+                        matched_file = None
+                        for candidate in candidates:
+                            if candidate in all_files_map:
+                                matched_file = all_files_map[candidate]
+                                break
+
+                        if matched_file is None:
+                            print(f"No file found for: {row.midas_file_name}")
+                            continue
+
+                        dst_path = dist_dir / split / label / matched_file.name
+                        shutil.copy2(matched_file, dst_path)
+
+                count_files_in_image_folders(output_root_dir)
+
+
+            create_image_folders(
+                result_dict,
+                get_data_dir() / "input" / "raw_images",
+                get_data_dir() / "output" / "split_images",
+            )
           metadata: {}
       executionMode: block
       id: 0ec0b8e56f5047a2977faf56de84910c
@@ -426,16 +426,9 @@ project:
           content: Import Libraries
           metadata:
             formattedRanges: []
-        - id: df31164644f74251abafb7e4a150921b
-          blockGroup: 9e2ca332c3f744b8bf566281988cf79b
-          sortingKey: "000006"
-          type: text-cell-h1
-          content: Load Model
-          metadata:
-            formattedRanges: []
         - id: 4bafbac3ca2f430f8c2a26077b123411
           blockGroup: d2523ab7000544b091b48ed581b696a2
-          sortingKey: "000007"
+          sortingKey: "000006"
           contentHash: 2e1e94ae
           executionFinishedAt: 2026-03-07T09:24:47.673Z
           executionStartedAt: 2026-03-07T09:24:47.673Z
@@ -460,7 +453,7 @@ project:
             execution_context_id: 6ba30d67-0ffb-47c9-9df3-c151395866d7
         - id: 6b7472b50aed46db82f262239f7eee0b
           blockGroup: 15d44a76791a4e21bb5fe9689c8355c3
-          sortingKey: "000008"
+          sortingKey: "000007"
           contentHash: 8756fc07
           executionFinishedAt: 2026-03-07T09:24:47.723Z
           executionStartedAt: 2026-03-07T09:24:47.723Z
@@ -477,6 +470,13 @@ project:
             execution_start: 1772875487723
             execution_millis: 0
             execution_context_id: 6ba30d67-0ffb-47c9-9df3-c151395866d7
+        - id: df31164644f74251abafb7e4a150921b
+          blockGroup: 9e2ca332c3f744b8bf566281988cf79b
+          sortingKey: "000008"
+          type: text-cell-h1
+          content: Load Model
+          metadata:
+            formattedRanges: []
         - id: 850e4334b66f48ee86c6894ce16261f2
           blockGroup: 075b289a3d034c6aad01a13dca1d8be4
           sortingKey: "000009"
@@ -719,9 +719,51 @@ project:
             execution_start: 1772875487873
             execution_millis: 0
             execution_context_id: 6ba30d67-0ffb-47c9-9df3-c151395866d7
+        - id: 3f71d7aa3f2b4f2ab0548bdae596a632
+          blockGroup: 8f8d23f77c0648b8b799979c967cf36e
+          sortingKey: "000012"
+          type: text-cell-h1
+          content: Visualize Transformation
+          metadata:
+            formattedRanges: []
+        - id: dcf9a84c57204663be35c7934bb6b69d
+          blockGroup: 439d95504e4040ccac030cf2e103c525
+          sortingKey: "000013"
+          contentHash: 4001d847
+          executionFinishedAt: 2026-03-07T09:24:47.823Z
+          executionStartedAt: 2026-03-07T09:24:47.823Z
+          type: code
+          content: >-
+            class ImageFolderWithPaths(ImageFolder):
+                """Custom ImageFolder that returns image, label, and filename."""
+
+                def __getitem__(self, index):
+                    # Get the original tuple (image, label)
+                    original_tuple = super().__getitem__(index)
+
+                    # Get the file path and extract filename
+                    full_path = self.samples[index][0]
+                    filename = Path(full_path).name
+
+                    # Return (image, label, filename, full_path)
+                    return original_tuple + (filename, full_path)
+
+
+            def custom_collate_fn(batch):
+                """Custom collate function to handle the additional filename."""
+
+                images, labels, filenames, full_paths = zip(*batch)
+                images = torch.stack(images)
+                labels = torch.tensor(labels)
+
+                return images, labels, list(filenames), list(full_paths)
+          metadata:
+            execution_start: 1772875487823
+            execution_millis: 0
+            execution_context_id: 6ba30d67-0ffb-47c9-9df3-c151395866d7
         - id: 9afa1cf6e4ef4260ab65e2e4b77d45d9
           blockGroup: c3836fac7d414129a494088a7ff86f0c
-          sortingKey: "000012"
+          sortingKey: "000014"
           contentHash: 602e11e1
           executionFinishedAt: 2026-03-07T09:24:47.923Z
           executionStartedAt: 2026-03-07T09:24:47.923Z
@@ -802,48 +844,6 @@ project:
                     imshow(out, title)
           metadata:
             execution_start: 1772875487923
-            execution_millis: 0
-            execution_context_id: 6ba30d67-0ffb-47c9-9df3-c151395866d7
-        - id: 3f71d7aa3f2b4f2ab0548bdae596a632
-          blockGroup: 8f8d23f77c0648b8b799979c967cf36e
-          sortingKey: "000013"
-          type: text-cell-h1
-          content: Visualize Transformation
-          metadata:
-            formattedRanges: []
-        - id: dcf9a84c57204663be35c7934bb6b69d
-          blockGroup: 439d95504e4040ccac030cf2e103c525
-          sortingKey: "000014"
-          contentHash: 4001d847
-          executionFinishedAt: 2026-03-07T09:24:47.823Z
-          executionStartedAt: 2026-03-07T09:24:47.823Z
-          type: code
-          content: >-
-            class ImageFolderWithPaths(ImageFolder):
-                """Custom ImageFolder that returns image, label, and filename."""
-
-                def __getitem__(self, index):
-                    # Get the original tuple (image, label)
-                    original_tuple = super().__getitem__(index)
-
-                    # Get the file path and extract filename
-                    full_path = self.samples[index][0]
-                    filename = Path(full_path).name
-
-                    # Return (image, label, filename, full_path)
-                    return original_tuple + (filename, full_path)
-
-
-            def custom_collate_fn(batch):
-                """Custom collate function to handle the additional filename."""
-
-                images, labels, filenames, full_paths = zip(*batch)
-                images = torch.stack(images)
-                labels = torch.tensor(labels)
-
-                return images, labels, list(filenames), list(full_paths)
-          metadata:
-            execution_start: 1772875487823
             execution_millis: 0
             execution_context_id: 6ba30d67-0ffb-47c9-9df3-c151395866d7
         - id: e78b011b46ec411dab04011577966e5e
@@ -1083,16 +1083,9 @@ project:
             execution_start: 1772875488023
             execution_millis: 0
             execution_context_id: 6ba30d67-0ffb-47c9-9df3-c151395866d7
-        - id: 5725796d57394de09e8bb96f8e01ce45
-          blockGroup: 5cbf2f6f612b4f9796c0c634dead3bd5
-          sortingKey: "000018"
-          type: text-cell-h1
-          content: Evaluate Model
-          metadata:
-            formattedRanges: []
         - id: 0872b1c5a64a4ded8c2e3ec26527c6ab
           blockGroup: 6a6e913b7abd45e99cd2956fabb253a4
-          sortingKey: "000019"
+          sortingKey: "000018"
           contentHash: 4e8b7acc
           executionFinishedAt: 2026-03-07T09:24:48.073Z
           executionStartedAt: 2026-03-07T09:24:48.073Z
@@ -1286,9 +1279,16 @@ project:
             execution_context_id: 6ba30d67-0ffb-47c9-9df3-c151395866d7
         - id: 31ddbcc685744bb9ac6b77e4613c4fcf
           blockGroup: 715a446e99da4f34b638b15b99788aa9
-          sortingKey: "000020"
+          sortingKey: "000019"
           type: text-cell-h1
           content: Train Model
+          metadata:
+            formattedRanges: []
+        - id: 5725796d57394de09e8bb96f8e01ce45
+          blockGroup: 5cbf2f6f612b4f9796c0c634dead3bd5
+          sortingKey: "000020"
+          type: text-cell-h1
+          content: Evaluate Model
           metadata:
             formattedRanges: []
         - id: 0aace209b4d3409388006b8426d22619
@@ -1450,16 +1450,9 @@ project:
             execution_start: 1772875488173
             execution_millis: 434535
             execution_context_id: 6ba30d67-0ffb-47c9-9df3-c151395866d7
-        - id: acfe17a1a42e4dcdaaa3f7b36ecfa4c0
-          blockGroup: 6538c2a2148f4448a0388d95f9ad0620
-          sortingKey: "000024"
-          type: text-cell-h1
-          content: Copy out to /Work
-          metadata:
-            formattedRanges: []
         - id: 0853bd70190f4457af453bd83af01310
           blockGroup: e922793117db4a808b9fc7159aa32d14
-          sortingKey: "000025"
+          sortingKey: "000024"
           contentHash: 7c60d7b2
           executionFinishedAt: 2026-03-07T09:32:02.758Z
           executionStartedAt: 2026-03-07T09:32:02.753Z
@@ -1476,7 +1469,7 @@ project:
             execution_context_id: 6ba30d67-0ffb-47c9-9df3-c151395866d7
         - id: 8657da297e38489c84786c16085f8bb9
           blockGroup: 3be5381049054379a8858eff675f3767
-          sortingKey: "000026"
+          sortingKey: "000025"
           contentHash: e0c798f
           executionFinishedAt: 2026-03-07T09:32:07.088Z
           executionStartedAt: 2026-03-07T09:32:02.803Z
@@ -1491,6 +1484,13 @@ project:
             execution_start: 1772875922803
             execution_millis: 4285
             execution_context_id: 6ba30d67-0ffb-47c9-9df3-c151395866d7
+        - id: acfe17a1a42e4dcdaaa3f7b36ecfa4c0
+          blockGroup: 6538c2a2148f4448a0388d95f9ad0620
+          sortingKey: "000026"
+          type: text-cell-h1
+          content: Copy out to /Work
+          metadata:
+            formattedRanges: []
       executionMode: block
       id: 1f4b30e0006e41a4b8250373a7d81532
       isModule: false
@@ -1646,9 +1646,35 @@ project:
           content: Global Settings
           metadata:
             formattedRanges: []
+        - id: 10ac4268d38445d8b0ddc2915e1073c7
+          blockGroup: 15d44a76791a4e21bb5fe9689c8355c3
+          sortingKey: "000006"
+          contentHash: 8756fc07
+          executionFinishedAt: 2026-03-08T11:20:23.282Z
+          executionStartedAt: 2026-03-08T11:20:23.282Z
+          type: code
+          content: >-
+            INPUT_DIR = Path("/tmp/mra_midas_skin_cancer_ml/data/input")
+
+            OUTPUT_DIR = Path("/tmp/mra_midas_skin_cancer_ml/data/output")
+
+            BATCH_SIZE = 64
+
+            NUM_WORKERS = 8
+          metadata:
+            execution_start: 1772968823282
+            execution_millis: 0
+            execution_context_id: ad87d35b-6eca-48e5-99ee-c9f6d24e02a5
+        - id: 2877c3db67ed46a19c7456bd00f3a98d
+          blockGroup: 9e2ca332c3f744b8bf566281988cf79b
+          sortingKey: "000007"
+          type: text-cell-h1
+          content: Load Model
+          metadata:
+            formattedRanges: []
         - id: 030f6ae553714a3eb32bb96592d2e9d4
           blockGroup: d2523ab7000544b091b48ed581b696a2
-          sortingKey: "000006"
+          sortingKey: "000008"
           contentHash: 2e1e94ae
           executionFinishedAt: 2026-03-08T11:20:23.232Z
           executionStartedAt: 2026-03-08T11:20:23.232Z
@@ -1671,32 +1697,6 @@ project:
             execution_start: 1772968823232
             execution_millis: 0
             execution_context_id: ad87d35b-6eca-48e5-99ee-c9f6d24e02a5
-        - id: 10ac4268d38445d8b0ddc2915e1073c7
-          blockGroup: 15d44a76791a4e21bb5fe9689c8355c3
-          sortingKey: "000007"
-          contentHash: 8756fc07
-          executionFinishedAt: 2026-03-08T11:20:23.282Z
-          executionStartedAt: 2026-03-08T11:20:23.282Z
-          type: code
-          content: >-
-            INPUT_DIR = Path("/tmp/mra_midas_skin_cancer_ml/data/input")
-
-            OUTPUT_DIR = Path("/tmp/mra_midas_skin_cancer_ml/data/output")
-
-            BATCH_SIZE = 64
-
-            NUM_WORKERS = 8
-          metadata:
-            execution_start: 1772968823282
-            execution_millis: 0
-            execution_context_id: ad87d35b-6eca-48e5-99ee-c9f6d24e02a5
-        - id: 2877c3db67ed46a19c7456bd00f3a98d
-          blockGroup: 9e2ca332c3f744b8bf566281988cf79b
-          sortingKey: "000008"
-          type: text-cell-h1
-          content: Load Model
-          metadata:
-            formattedRanges: []
         - id: 5d82f7f42d314273920512c6b4c10cc5
           blockGroup: 075b289a3d034c6aad01a13dca1d8be4
           sortingKey: "000009"
@@ -1821,9 +1821,101 @@ project:
             execution_start: 1772968823382
             execution_millis: 0
             execution_context_id: ad87d35b-6eca-48e5-99ee-c9f6d24e02a5
+        - id: f1223b20cebc4e0b87a8cf7417947798
+          blockGroup: 8f8d23f77c0648b8b799979c967cf36e
+          sortingKey: "000012"
+          type: text-cell-h1
+          content: Visualize Transformation
+          metadata:
+            formattedRanges: []
+        - id: 5d8644ee26084482b00206b28fdded29
+          blockGroup: c3836fac7d414129a494088a7ff86f0c
+          sortingKey: "000013"
+          contentHash: 602e11e1
+          executionFinishedAt: 2026-03-08T11:20:23.492Z
+          executionStartedAt: 2026-03-08T11:20:23.492Z
+          type: code
+          content: >-
+            %matplotlib inline
+
+
+            def imshow(inp, title=None):
+                """Imshow for single image tensor."""
+
+                mean = torch.tensor([0.485, 0.456, 0.406])
+                std = torch.tensor([0.229, 0.224, 0.225])
+
+                inp = inp.permute([1, 2, 0])
+                inp = torch.clip(std * inp + mean, 0, 1)
+                inp = inp.numpy()
+
+                plt.figure(figsize=(8, 6))
+                plt.imshow(inp)
+                plt.axis("off")
+                if title is not None:
+                    plt.title(title)
+                plt.pause(0.001)
+
+
+            def batch_imshow(n, dataset, dataloaders, key, show_filenames=False):
+                """Imshow for batch image tensor."""
+
+                inputs, labels, filenames, full_paths = next(iter(dataloaders[key]))
+                num_imgs = min(n, inputs.size(0))
+                out = make_grid(inputs[:num_imgs], padding=1, nrow=3)
+
+                class_names = dataset.classes
+
+                if show_filenames:
+                    # Create subplot with space for filenames
+                    fig, (ax1, ax2) = plt.subplots(
+                        1, 
+                        2,
+                        figsize=(14, 6),
+                        gridspec_kw={'width_ratios': [3, 4]}
+                    )
+
+                    # Display images
+                    mean = torch.tensor([0.485, 0.456, 0.406])
+                    std = torch.tensor([0.229, 0.224, 0.225])
+                    out_display = out.permute([1, 2, 0])
+                    out_display = torch.clip(std * out_display + mean, 0, 1)
+                    out_display = out_display.numpy()
+
+                    ax1.imshow(out_display)
+                    ax1.axis("off")
+                    ax1.set_title("Sample Images")
+
+                    # Display filenames vertically
+                    filename_text = []
+                    for i in range(num_imgs):
+                        class_name = class_names[labels[i].item()]
+                        filename_text.append(f"{i+1}.{filenames[i]} — {class_name}")
+                        filename_text.append("")  # Empty line for spacing
+
+                    ax2.text(
+                        0.05, 
+                        0.95, 
+                        '\n'.join(filename_text),
+                        transform=ax2.transAxes,
+                        fontsize=10,
+                        verticalalignment='top',
+                        fontfamily='monospace'
+                    )
+                    ax2.axis('off')
+
+                    plt.tight_layout()
+                    plt.pause(0.001)
+                else:
+                    title = [class_names[x] for x in labels[:num_imgs]]
+                    imshow(out, title)
+          metadata:
+            execution_start: 1772968823492
+            execution_millis: 0
+            execution_context_id: ad87d35b-6eca-48e5-99ee-c9f6d24e02a5
         - id: ec2eca4b3a0645dd884fe84e5b888b72
           blockGroup: ab59d2071e1248ff895692a114911da8
-          sortingKey: "000012"
+          sortingKey: "000014"
           contentHash: f72def1c
           executionFinishedAt: 2026-03-08T11:20:23.442Z
           executionStartedAt: 2026-03-08T11:20:23.442Z
@@ -1952,98 +2044,6 @@ project:
                 return img_train, img_val, img_test, dataloaders, dataset_sizes, class_weights
           metadata:
             execution_start: 1772968823442
-            execution_millis: 0
-            execution_context_id: ad87d35b-6eca-48e5-99ee-c9f6d24e02a5
-        - id: f1223b20cebc4e0b87a8cf7417947798
-          blockGroup: 8f8d23f77c0648b8b799979c967cf36e
-          sortingKey: "000013"
-          type: text-cell-h1
-          content: Visualize Transformation
-          metadata:
-            formattedRanges: []
-        - id: 5d8644ee26084482b00206b28fdded29
-          blockGroup: c3836fac7d414129a494088a7ff86f0c
-          sortingKey: "000014"
-          contentHash: 602e11e1
-          executionFinishedAt: 2026-03-08T11:20:23.492Z
-          executionStartedAt: 2026-03-08T11:20:23.492Z
-          type: code
-          content: >-
-            %matplotlib inline
-
-
-            def imshow(inp, title=None):
-                """Imshow for single image tensor."""
-
-                mean = torch.tensor([0.485, 0.456, 0.406])
-                std = torch.tensor([0.229, 0.224, 0.225])
-
-                inp = inp.permute([1, 2, 0])
-                inp = torch.clip(std * inp + mean, 0, 1)
-                inp = inp.numpy()
-
-                plt.figure(figsize=(8, 6))
-                plt.imshow(inp)
-                plt.axis("off")
-                if title is not None:
-                    plt.title(title)
-                plt.pause(0.001)
-
-
-            def batch_imshow(n, dataset, dataloaders, key, show_filenames=False):
-                """Imshow for batch image tensor."""
-
-                inputs, labels, filenames, full_paths = next(iter(dataloaders[key]))
-                num_imgs = min(n, inputs.size(0))
-                out = make_grid(inputs[:num_imgs], padding=1, nrow=3)
-
-                class_names = dataset.classes
-
-                if show_filenames:
-                    # Create subplot with space for filenames
-                    fig, (ax1, ax2) = plt.subplots(
-                        1, 
-                        2,
-                        figsize=(14, 6),
-                        gridspec_kw={'width_ratios': [3, 4]}
-                    )
-
-                    # Display images
-                    mean = torch.tensor([0.485, 0.456, 0.406])
-                    std = torch.tensor([0.229, 0.224, 0.225])
-                    out_display = out.permute([1, 2, 0])
-                    out_display = torch.clip(std * out_display + mean, 0, 1)
-                    out_display = out_display.numpy()
-
-                    ax1.imshow(out_display)
-                    ax1.axis("off")
-                    ax1.set_title("Sample Images")
-
-                    # Display filenames vertically
-                    filename_text = []
-                    for i in range(num_imgs):
-                        class_name = class_names[labels[i].item()]
-                        filename_text.append(f"{i+1}.{filenames[i]} — {class_name}")
-                        filename_text.append("")  # Empty line for spacing
-
-                    ax2.text(
-                        0.05, 
-                        0.95, 
-                        '\n'.join(filename_text),
-                        transform=ax2.transAxes,
-                        fontsize=10,
-                        verticalalignment='top',
-                        fontfamily='monospace'
-                    )
-                    ax2.axis('off')
-
-                    plt.tight_layout()
-                    plt.pause(0.001)
-                else:
-                    title = [class_names[x] for x in labels[:num_imgs]]
-                    imshow(out, title)
-          metadata:
-            execution_start: 1772968823492
             execution_millis: 0
             execution_context_id: ad87d35b-6eca-48e5-99ee-c9f6d24e02a5
         - id: f564a78aaf77464da81a34060f673e21
@@ -2238,61 +2238,9 @@ project:
           content: Train Model
           metadata:
             formattedRanges: []
-        - id: 1034f6579ef64f7e86a1677140b7224e
-          blockGroup: e41fc830c5db4d94a61fe6e805f25560
-          sortingKey: "000018"
-          contentHash: 722e0b22
-          executionFinishedAt: 2026-03-08T11:20:23.592Z
-          executionStartedAt: 2026-03-08T11:20:23.592Z
-          type: code
-          content: >-
-            class EarlyStopping:
-                def __init__(self, patience=10, min_delta=0.001, mode='max'):
-                    """
-                    Stops training if metric (e.g. accuracy or validation loss) doesn't improve
-                    after `patience` epochs.
-                    """
-                    self.patience = patience
-                    self.min_delta = min_delta
-                    self.counter = 0
-                    self.best_score = None
-                    self.early_stop = False
-
-                    if mode not in ['min', 'max']:
-                        raise ValueError(f"mode '{mode}' is not supported. Use 'min' or 'max'")
-                    self.mode = mode
-
-                def __call__(self, metric):
-                    if self.best_score is None:
-                        self.best_score = metric
-                    else:
-                        if self.mode == 'min':
-                            # For loss: improvement happens when metric decreases
-                            if metric < self.best_score - self.min_delta:
-                                self.best_score = metric
-                                self.counter = 0
-                            else:
-                                self.counter += 1
-                        else:  # mode == 'max'
-                            # For accuracy: improvement happens when metric increases
-                            if metric > self.best_score + self.min_delta:
-                                self.best_score = metric
-                                self.counter = 0
-                            else:
-                                self.counter += 1
-
-                    print(f"Early stopping best score: {self.best_score:.4f}")
-                    print(f"Early stopping counter: {self.counter}")
-
-                    if self.counter >= self.patience:
-                        self.early_stop = True
-          metadata:
-            execution_start: 1772968823592
-            execution_millis: 0
-            execution_context_id: ad87d35b-6eca-48e5-99ee-c9f6d24e02a5
         - id: 78ad112cac5e4154bd3bc02e965e9679
           blockGroup: 6a6e913b7abd45e99cd2956fabb253a4
-          sortingKey: "000019"
+          sortingKey: "000018"
           contentHash: 4e8b7acc
           executionFinishedAt: 2026-03-08T11:20:23.762Z
           executionStartedAt: 2026-03-08T11:20:23.762Z
@@ -2486,11 +2434,63 @@ project:
             execution_context_id: ad87d35b-6eca-48e5-99ee-c9f6d24e02a5
         - id: 73a7d1348d344162a4efa0c8bff06970
           blockGroup: 5cbf2f6f612b4f9796c0c634dead3bd5
-          sortingKey: "000020"
+          sortingKey: "000019"
           type: text-cell-h1
           content: Evaluate Model
           metadata:
             formattedRanges: []
+        - id: 1034f6579ef64f7e86a1677140b7224e
+          blockGroup: e41fc830c5db4d94a61fe6e805f25560
+          sortingKey: "000020"
+          contentHash: 722e0b22
+          executionFinishedAt: 2026-03-08T11:20:23.592Z
+          executionStartedAt: 2026-03-08T11:20:23.592Z
+          type: code
+          content: >-
+            class EarlyStopping:
+                def __init__(self, patience=10, min_delta=0.001, mode='max'):
+                    """
+                    Stops training if metric (e.g. accuracy or validation loss) doesn't improve
+                    after `patience` epochs.
+                    """
+                    self.patience = patience
+                    self.min_delta = min_delta
+                    self.counter = 0
+                    self.best_score = None
+                    self.early_stop = False
+
+                    if mode not in ['min', 'max']:
+                        raise ValueError(f"mode '{mode}' is not supported. Use 'min' or 'max'")
+                    self.mode = mode
+
+                def __call__(self, metric):
+                    if self.best_score is None:
+                        self.best_score = metric
+                    else:
+                        if self.mode == 'min':
+                            # For loss: improvement happens when metric decreases
+                            if metric < self.best_score - self.min_delta:
+                                self.best_score = metric
+                                self.counter = 0
+                            else:
+                                self.counter += 1
+                        else:  # mode == 'max'
+                            # For accuracy: improvement happens when metric increases
+                            if metric > self.best_score + self.min_delta:
+                                self.best_score = metric
+                                self.counter = 0
+                            else:
+                                self.counter += 1
+
+                    print(f"Early stopping best score: {self.best_score:.4f}")
+                    print(f"Early stopping counter: {self.counter}")
+
+                    if self.counter >= self.patience:
+                        self.early_stop = True
+          metadata:
+            execution_start: 1772968823592
+            execution_millis: 0
+            execution_context_id: ad87d35b-6eca-48e5-99ee-c9f6d24e02a5
         - id: 6f96d795a9f04979aac518d721b95e18
           blockGroup: 16387820c325419089b3c20958e0d670
           sortingKey: "000021"
@@ -2668,16 +2668,9 @@ project:
             execution_start: 1772968823871
             execution_millis: 451741
             execution_context_id: ad87d35b-6eca-48e5-99ee-c9f6d24e02a5
-        - id: 2a20de1313bc4ca2815232d6feed48b1
-          blockGroup: 6538c2a2148f4448a0388d95f9ad0620
-          sortingKey: "000024"
-          type: text-cell-h1
-          content: Copy out to /Work
-          metadata:
-            formattedRanges: []
         - id: 38104a0cda0441d0944f79571d35f841
           blockGroup: e922793117db4a808b9fc7159aa32d14
-          sortingKey: "000025"
+          sortingKey: "000024"
           contentHash: 91cdee04
           executionFinishedAt: 2026-03-08T11:27:58.286Z
           executionStartedAt: 2026-03-08T11:27:55.662Z
@@ -2694,7 +2687,7 @@ project:
             execution_context_id: ad87d35b-6eca-48e5-99ee-c9f6d24e02a5
         - id: 4d634e19fa6d40369d6f1298dee92997
           blockGroup: 3be5381049054379a8858eff675f3767
-          sortingKey: "000026"
+          sortingKey: "000025"
           contentHash: 87a86dbc
           executionFinishedAt: 2026-03-08T11:28:02.226Z
           executionStartedAt: 2026-03-08T11:27:58.331Z
@@ -2709,6 +2702,13 @@ project:
             execution_start: 1772969278331
             execution_millis: 3895
             execution_context_id: ad87d35b-6eca-48e5-99ee-c9f6d24e02a5
+        - id: 2a20de1313bc4ca2815232d6feed48b1
+          blockGroup: 6538c2a2148f4448a0388d95f9ad0620
+          sortingKey: "000026"
+          type: text-cell-h1
+          content: Copy out to /Work
+          metadata:
+            formattedRanges: []
       executionMode: block
       id: 6da870826f1e4d45b841c80980e787dc
       isModule: false
@@ -2747,9 +2747,8 @@ project:
           blockGroup: af60a4bf8eb446fd960922b8073ab748
           sortingKey: "000001"
           contentHash: 8d2fa896
-          executionCount: 1
-          executionFinishedAt: 2026-03-15T15:30:30.622Z
-          executionStartedAt: 2026-03-15T15:30:29.033Z
+          executionFinishedAt: 2026-03-21T15:21:08.437Z
+          executionStartedAt: 2026-03-21T15:21:06.852Z
           type: code
           content: >-
             %%bash
@@ -2762,9 +2761,9 @@ project:
               else echo "There's no requirements.txt, so nothing to install."
             fi
           metadata:
-            execution_start: 1773588629033
-            execution_millis: 1589
-            execution_context_id: df1670e9-0324-45ff-a0cd-9a27a4a18248
+            execution_start: 1774106466852
+            execution_millis: 1585
+            execution_context_id: 6d88c691-4467-4da7-ac3f-fed1d03ac0d5
       executionMode: block
       id: e44b1600056645f4bca90d23da85b163
       isModule: false
@@ -2919,9 +2918,57 @@ project:
           content: Global Settings
           metadata:
             formattedRanges: []
+        - id: f203b782b45944d8b3aa617e865207b9
+          blockGroup: d2523ab7000544b091b48ed581b696a2
+          sortingKey: "000006"
+          contentHash: 2e1e94ae
+          executionFinishedAt: 2026-03-09T12:59:39.446Z
+          executionStartedAt: 2026-03-09T12:59:39.446Z
+          type: code
+          content: >-
+            seed = 42
+
+
+            def set_seeds(seed=seed):
+                torch.manual_seed(seed)
+                torch.cuda.manual_seed(seed)
+                torch.cuda.manual_seed_all(seed)
+                np.random.seed(seed)
+                random.seed(seed)
+                torch.backends.cudnn.deterministic = True
+                torch.backends.cudnn.benchmark = False # Selects best algorithm
+
+            set_seeds()
+          metadata:
+            execution_start: 1773061179446
+            execution_millis: 0
+            execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
+        - id: 2fb403dca8994f8d8938e1003d3817d6
+          blockGroup: 15d44a76791a4e21bb5fe9689c8355c3
+          sortingKey: "000007"
+          contentHash: 65838c8a
+          executionFinishedAt: 2026-03-09T12:59:39.507Z
+          executionStartedAt: 2026-03-09T12:59:39.506Z
+          type: code
+          content: >-
+            # INPUT_DIR = get_data_dir() / "output" / "split_images"
+
+            # OUTPUT_DIR = get_data_dir() / "output" / "image_model_output"
+
+            INPUT_DIR = Path("/tmp/mra_midas_skin_cancer_ml/data/input")
+
+            OUTPUT_DIR = Path("/tmp/mra_midas_skin_cancer_ml/data/output")
+
+            BATCH_SIZE = 64
+
+            NUM_WORKERS = 4
+          metadata:
+            execution_start: 1773061179506
+            execution_millis: 1
+            execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
         - id: 505966cf0ad743c4958975949f89b117
           blockGroup: 075b289a3d034c6aad01a13dca1d8be4
-          sortingKey: "000006"
+          sortingKey: "000008"
           contentHash: cde505b3
           executionFinishedAt: 2026-03-09T12:59:39.556Z
           executionStartedAt: 2026-03-09T12:59:39.556Z
@@ -3001,54 +3048,6 @@ project:
             execution_start: 1773061179556
             execution_millis: 0
             execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
-        - id: f203b782b45944d8b3aa617e865207b9
-          blockGroup: d2523ab7000544b091b48ed581b696a2
-          sortingKey: "000007"
-          contentHash: 2e1e94ae
-          executionFinishedAt: 2026-03-09T12:59:39.446Z
-          executionStartedAt: 2026-03-09T12:59:39.446Z
-          type: code
-          content: >-
-            seed = 42
-
-
-            def set_seeds(seed=seed):
-                torch.manual_seed(seed)
-                torch.cuda.manual_seed(seed)
-                torch.cuda.manual_seed_all(seed)
-                np.random.seed(seed)
-                random.seed(seed)
-                torch.backends.cudnn.deterministic = True
-                torch.backends.cudnn.benchmark = False # Selects best algorithm
-
-            set_seeds()
-          metadata:
-            execution_start: 1773061179446
-            execution_millis: 0
-            execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
-        - id: 2fb403dca8994f8d8938e1003d3817d6
-          blockGroup: 15d44a76791a4e21bb5fe9689c8355c3
-          sortingKey: "000008"
-          contentHash: 65838c8a
-          executionFinishedAt: 2026-03-09T12:59:39.507Z
-          executionStartedAt: 2026-03-09T12:59:39.506Z
-          type: code
-          content: >-
-            # INPUT_DIR = get_data_dir() / "output" / "split_images"
-
-            # OUTPUT_DIR = get_data_dir() / "output" / "image_model_output"
-
-            INPUT_DIR = Path("/tmp/mra_midas_skin_cancer_ml/data/input")
-
-            OUTPUT_DIR = Path("/tmp/mra_midas_skin_cancer_ml/data/output")
-
-            BATCH_SIZE = 64
-
-            NUM_WORKERS = 4
-          metadata:
-            execution_start: 1773061179506
-            execution_millis: 1
-            execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
         - id: 1b3690b952e84a81ae9359657b007b37
           blockGroup: 82daf01abfdb45729e3d6b641560387b
           sortingKey: "000009"
@@ -3098,16 +3097,9 @@ project:
             execution_start: 1773061179606
             execution_millis: 1
             execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
-        - id: 09d04e02c2b844b8a8ff4b6c75bc13aa
-          blockGroup: f917861862c4445a855682951b06f1d9
-          sortingKey: "000012"
-          type: text-cell-h1
-          content: Setup Model
-          metadata:
-            formattedRanges: []
         - id: 90cb5489e76c44f7ab2d6e0d5e91cb1d
           blockGroup: ab59d2071e1248ff895692a114911da8
-          sortingKey: "000013"
+          sortingKey: "000012"
           contentHash: 8c9d345b
           executionFinishedAt: 2026-03-09T12:59:39.656Z
           executionStartedAt: 2026-03-09T12:59:39.656Z
@@ -3240,9 +3232,16 @@ project:
             execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
         - id: 4409aea766b54fc3ac5a3bbc5b75668a
           blockGroup: 8f8d23f77c0648b8b799979c967cf36e
-          sortingKey: "000014"
+          sortingKey: "000013"
           type: text-cell-h1
           content: Visualize Transformation
+          metadata:
+            formattedRanges: []
+        - id: 09d04e02c2b844b8a8ff4b6c75bc13aa
+          blockGroup: f917861862c4445a855682951b06f1d9
+          sortingKey: "000014"
+          type: text-cell-h1
+          content: Setup Model
           metadata:
             formattedRanges: []
         - id: d5ce6e47be0d4101821cce2550ac4560
@@ -3515,115 +3514,9 @@ project:
           content: Train Model
           metadata:
             formattedRanges: []
-        - id: 67006680c6bc404f8f2dfb1366f05c5a
-          blockGroup: 16387820c325419089b3c20958e0d670
-          sortingKey: "000018"
-          contentHash: 5d2be8dc
-          executionFinishedAt: 2026-03-09T12:59:40.067Z
-          executionStartedAt: 2026-03-09T12:59:40.066Z
-          type: code
-          content: >-
-            def evaluate_and_plot(model, dataloader, class_names, checkpoint_path, output_dir):
-                """Evaluate model performance on test set and plot confusion matrix."""
-
-                set_seeds()
-
-                if len(class_names) != 2:
-                    raise ValueError(
-                        f"This evaluation expects binary classification, got {len(class_names)} classes: {class_names}"
-                    )
-
-                device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-                model.load_state_dict(torch.load(checkpoint_path, map_location=device))
-                model.to(device)
-                model.eval()
-
-                all_preds = []
-                all_labels = []
-                all_probs = []
-                all_file_names = []
-
-                positive_class_idx = 1
-                positive_class_name = class_names[positive_class_idx]
-
-                with torch.no_grad():
-                    for inputs, labels, file_names, _ in dataloader:
-                        inputs = inputs.to(device)
-                        labels = labels.to(device)
-
-                        outputs = model(inputs)
-                        probs = F.softmax(outputs, dim=1)
-
-                        # preds = torch.argmax(outputs, dim=1)
-                        threshold = 0.4
-                        preds = (probs[:, positive_class_idx] >= threshold).long()
-
-                        all_preds.extend(preds.cpu().numpy())
-                        all_labels.extend(labels.cpu().numpy())
-                        all_probs.extend(probs[:, positive_class_idx].cpu().numpy())
-                        all_file_names.extend(file_names)
-
-                pred_labels = [class_names[p] for p in all_preds]
-                actual_labels = [class_names[l] for l in all_labels]
-
-                results_df = pd.DataFrame({
-                    "file_name": all_file_names,
-                    f"{positive_class_name}_probability": all_probs,
-                    "prediction_label": pred_labels,
-                    "actual_label": actual_labels
-                })
-
-                out_stem = checkpoint_path.stem
-                out_dir = Path(output_dir)
-                out_dir.mkdir(parents=True, exist_ok=True)
-
-                results_df.to_excel(out_dir / f"{out_stem}_predictions.xlsx", index=False)
-
-                cm = confusion_matrix(all_labels, all_preds)
-                accuracy = (cm.diagonal().sum() / cm.sum()) * 100
-                print(f"Test Accuracy: {accuracy:.2f}%")
-
-                report = classification_report(
-                    all_labels,
-                    all_preds,
-                    target_names=class_names,
-                    digits=4,
-                    zero_division=0
-                )
-                print("\n" + report)
-
-                roc_auc = None
-                roc_auc_label = f"ROC AUC ({positive_class_name})"
-                try:
-                    roc_auc = roc_auc_score(all_labels, all_probs)
-                    print(f"{roc_auc_label}: {roc_auc:.4f}")
-                except ValueError as err:
-                    print(f"{roc_auc_label}: N/A ({err})")
-
-                disp = ConfusionMatrixDisplay(
-                    confusion_matrix=cm, display_labels=class_names
-                )
-                disp.plot(cmap="Blues", xticks_rotation=45)
-                plt.title("Confusion Matrix")
-                plt.tight_layout()
-                plt.savefig(out_dir / f"{out_stem}_confusion_matrix.png")
-                plt.show()
-                plt.close()
-
-                with open(out_dir / f"{out_stem}_metrics.txt", "w") as f:
-                    f.write(f"Accuracy: {accuracy:.2f}%\n")
-                    if roc_auc is not None:
-                        f.write(f"{roc_auc_label}: {roc_auc:.4f}\n\n")
-                    else:
-                        f.write(f"{roc_auc_label}: N/A\n\n")
-                    f.write(report)
-          metadata:
-            execution_start: 1773061180066
-            execution_millis: 1
-            execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
         - id: 9d2f7ed7f81847ebbe9ef6aaa250977e
           blockGroup: e41fc830c5db4d94a61fe6e805f25560
-          sortingKey: "000019"
+          sortingKey: "000018"
           contentHash: 9471bf94
           executionFinishedAt: 2026-03-09T12:59:39.826Z
           executionStartedAt: 2026-03-09T12:59:39.826Z
@@ -3675,7 +3568,7 @@ project:
             execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
         - id: 68a25e8b8a6a42569c16bc1e8622eb30
           blockGroup: 6a6e913b7abd45e99cd2956fabb253a4
-          sortingKey: "000020"
+          sortingKey: "000019"
           contentHash: 67f1c436
           executionFinishedAt: 2026-03-09T12:59:40.006Z
           executionStartedAt: 2026-03-09T12:59:40.006Z
@@ -3887,6 +3780,112 @@ project:
             execution_start: 1773061180006
             execution_millis: 0
             execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
+        - id: 67006680c6bc404f8f2dfb1366f05c5a
+          blockGroup: 16387820c325419089b3c20958e0d670
+          sortingKey: "000020"
+          contentHash: 5d2be8dc
+          executionFinishedAt: 2026-03-09T12:59:40.067Z
+          executionStartedAt: 2026-03-09T12:59:40.066Z
+          type: code
+          content: >-
+            def evaluate_and_plot(model, dataloader, class_names, checkpoint_path, output_dir):
+                """Evaluate model performance on test set and plot confusion matrix."""
+
+                set_seeds()
+
+                if len(class_names) != 2:
+                    raise ValueError(
+                        f"This evaluation expects binary classification, got {len(class_names)} classes: {class_names}"
+                    )
+
+                device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+                model.load_state_dict(torch.load(checkpoint_path, map_location=device))
+                model.to(device)
+                model.eval()
+
+                all_preds = []
+                all_labels = []
+                all_probs = []
+                all_file_names = []
+
+                positive_class_idx = 1
+                positive_class_name = class_names[positive_class_idx]
+
+                with torch.no_grad():
+                    for inputs, labels, file_names, _ in dataloader:
+                        inputs = inputs.to(device)
+                        labels = labels.to(device)
+
+                        outputs = model(inputs)
+                        probs = F.softmax(outputs, dim=1)
+
+                        # preds = torch.argmax(outputs, dim=1)
+                        threshold = 0.4
+                        preds = (probs[:, positive_class_idx] >= threshold).long()
+
+                        all_preds.extend(preds.cpu().numpy())
+                        all_labels.extend(labels.cpu().numpy())
+                        all_probs.extend(probs[:, positive_class_idx].cpu().numpy())
+                        all_file_names.extend(file_names)
+
+                pred_labels = [class_names[p] for p in all_preds]
+                actual_labels = [class_names[l] for l in all_labels]
+
+                results_df = pd.DataFrame({
+                    "file_name": all_file_names,
+                    f"{positive_class_name}_probability": all_probs,
+                    "prediction_label": pred_labels,
+                    "actual_label": actual_labels
+                })
+
+                out_stem = checkpoint_path.stem
+                out_dir = Path(output_dir)
+                out_dir.mkdir(parents=True, exist_ok=True)
+
+                results_df.to_excel(out_dir / f"{out_stem}_predictions.xlsx", index=False)
+
+                cm = confusion_matrix(all_labels, all_preds)
+                accuracy = (cm.diagonal().sum() / cm.sum()) * 100
+                print(f"Test Accuracy: {accuracy:.2f}%")
+
+                report = classification_report(
+                    all_labels,
+                    all_preds,
+                    target_names=class_names,
+                    digits=4,
+                    zero_division=0
+                )
+                print("\n" + report)
+
+                roc_auc = None
+                roc_auc_label = f"ROC AUC ({positive_class_name})"
+                try:
+                    roc_auc = roc_auc_score(all_labels, all_probs)
+                    print(f"{roc_auc_label}: {roc_auc:.4f}")
+                except ValueError as err:
+                    print(f"{roc_auc_label}: N/A ({err})")
+
+                disp = ConfusionMatrixDisplay(
+                    confusion_matrix=cm, display_labels=class_names
+                )
+                disp.plot(cmap="Blues", xticks_rotation=45)
+                plt.title("Confusion Matrix")
+                plt.tight_layout()
+                plt.savefig(out_dir / f"{out_stem}_confusion_matrix.png")
+                plt.show()
+                plt.close()
+
+                with open(out_dir / f"{out_stem}_metrics.txt", "w") as f:
+                    f.write(f"Accuracy: {accuracy:.2f}%\n")
+                    if roc_auc is not None:
+                        f.write(f"{roc_auc_label}: {roc_auc:.4f}\n\n")
+                    else:
+                        f.write(f"{roc_auc_label}: N/A\n\n")
+                    f.write(report)
+          metadata:
+            execution_start: 1773061180066
+            execution_millis: 1
+            execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
         - id: ce10967a1f9c498288655373f5a4596d
           blockGroup: f24eb2256ecf4d7eac9c8f3f99b22f68
           sortingKey: "000021"
@@ -3965,33 +3964,16 @@ project:
             execution_start: 1773061180126
             execution_millis: 6484265
             execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
-        - id: accf547f0111478c9c4cf829c328ea97
-          blockGroup: 3de7fb2f350b4b55ad3492dfb3e6bc1d
-          sortingKey: "000024"
-          contentHash: e0c798f
-          executionFinishedAt: 2026-03-09T14:48:26.526Z
-          executionStartedAt: 2026-03-09T14:47:57.936Z
-          type: code
-          content: >-
-            !cp -r -n /tmp/mra_midas_skin_cancer_ml/data/output/1ft/* /work/image_model_output/1ft
-
-            !cp -r -n /tmp/mra_midas_skin_cancer_ml/data/output/6in/* /work/image_model_output/6in
-
-            !cp -r -n /tmp/mra_midas_skin_cancer_ml/data/output/dscope/* /work/image_model_output/dscope
-          metadata:
-            execution_start: 1773067677936
-            execution_millis: 28590
-            execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
         - id: 15bc57200e0044dfa8705ead21824dc7
           blockGroup: 24cd0346256c4bc1aa44ff3118e83950
-          sortingKey: "000025"
+          sortingKey: "000024"
           type: text-cell-h1
           content: Copy out to /Work
           metadata:
             formattedRanges: []
         - id: 62dcaae517e84f6aaa24065c2ebf9d5d
           blockGroup: 2f6502f6d8064720ba1c993217bdc441
-          sortingKey: "000026"
+          sortingKey: "000025"
           contentHash: 91cdee04
           executionFinishedAt: 2026-03-09T14:47:57.886Z
           executionStartedAt: 2026-03-09T14:47:44.460Z
@@ -4005,6 +3987,23 @@ project:
           metadata:
             execution_start: 1773067664460
             execution_millis: 13426
+            execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
+        - id: accf547f0111478c9c4cf829c328ea97
+          blockGroup: 3de7fb2f350b4b55ad3492dfb3e6bc1d
+          sortingKey: "000026"
+          contentHash: e0c798f
+          executionFinishedAt: 2026-03-09T14:48:26.526Z
+          executionStartedAt: 2026-03-09T14:47:57.936Z
+          type: code
+          content: >-
+            !cp -r -n /tmp/mra_midas_skin_cancer_ml/data/output/1ft/* /work/image_model_output/1ft
+
+            !cp -r -n /tmp/mra_midas_skin_cancer_ml/data/output/6in/* /work/image_model_output/6in
+
+            !cp -r -n /tmp/mra_midas_skin_cancer_ml/data/output/dscope/* /work/image_model_output/dscope
+          metadata:
+            execution_start: 1773067677936
+            execution_millis: 28590
             execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
       executionMode: block
       id: a9737cffaad14b7b9ec668090f5dcc23
@@ -4159,9 +4158,57 @@ project:
           content: Global Settings
           metadata:
             formattedRanges: []
+        - id: c0cd7daddd444ec7b41ce2e1db1858ca
+          blockGroup: d2523ab7000544b091b48ed581b696a2
+          sortingKey: "000006"
+          contentHash: 2e1e94ae
+          executionFinishedAt: 2026-03-11T13:30:27.581Z
+          executionStartedAt: 2026-03-11T13:30:27.581Z
+          type: code
+          content: >-
+            seed = 42
+
+
+            def set_seeds(seed=seed):
+                torch.manual_seed(seed)
+                torch.cuda.manual_seed(seed)
+                torch.cuda.manual_seed_all(seed)
+                np.random.seed(seed)
+                random.seed(seed)
+                torch.backends.cudnn.deterministic = True
+                torch.backends.cudnn.benchmark = False # Selects best algorithm
+
+            set_seeds()
+          metadata:
+            execution_start: 1773235827581
+            execution_millis: 0
+            execution_context_id: 3cfd50bb-aaff-4439-b325-7463db04de5e
+        - id: 5a6bb79205234b0f8b33f40a4e3e713f
+          blockGroup: 15d44a76791a4e21bb5fe9689c8355c3
+          sortingKey: "000007"
+          contentHash: 65838c8a
+          executionFinishedAt: 2026-03-11T13:30:27.641Z
+          executionStartedAt: 2026-03-11T13:30:27.641Z
+          type: code
+          content: >-
+            # INPUT_DIR = get_data_dir() / "output" / "split_images"
+
+            # OUTPUT_DIR = get_data_dir() / "output" / "image_model_output"
+
+            INPUT_DIR = Path("/tmp/mra_midas_skin_cancer_ml/data/input")
+
+            OUTPUT_DIR = Path("/tmp/mra_midas_skin_cancer_ml/data/output")
+
+            BATCH_SIZE = 64
+
+            NUM_WORKERS = 4
+          metadata:
+            execution_start: 1773235827641
+            execution_millis: 0
+            execution_context_id: 3cfd50bb-aaff-4439-b325-7463db04de5e
         - id: 7018530defeb479e9e7b9c1730e442d4
           blockGroup: 075b289a3d034c6aad01a13dca1d8be4
-          sortingKey: "000006"
+          sortingKey: "000008"
           contentHash: cde505b3
           executionFinishedAt: 2026-03-11T13:30:28.001Z
           executionStartedAt: 2026-03-11T13:30:28.001Z
@@ -4241,54 +4288,6 @@ project:
             execution_start: 1773235828001
             execution_millis: 0
             execution_context_id: 3cfd50bb-aaff-4439-b325-7463db04de5e
-        - id: c0cd7daddd444ec7b41ce2e1db1858ca
-          blockGroup: d2523ab7000544b091b48ed581b696a2
-          sortingKey: "000007"
-          contentHash: 2e1e94ae
-          executionFinishedAt: 2026-03-11T13:30:27.581Z
-          executionStartedAt: 2026-03-11T13:30:27.581Z
-          type: code
-          content: >-
-            seed = 42
-
-
-            def set_seeds(seed=seed):
-                torch.manual_seed(seed)
-                torch.cuda.manual_seed(seed)
-                torch.cuda.manual_seed_all(seed)
-                np.random.seed(seed)
-                random.seed(seed)
-                torch.backends.cudnn.deterministic = True
-                torch.backends.cudnn.benchmark = False # Selects best algorithm
-
-            set_seeds()
-          metadata:
-            execution_start: 1773235827581
-            execution_millis: 0
-            execution_context_id: 3cfd50bb-aaff-4439-b325-7463db04de5e
-        - id: 5a6bb79205234b0f8b33f40a4e3e713f
-          blockGroup: 15d44a76791a4e21bb5fe9689c8355c3
-          sortingKey: "000008"
-          contentHash: 65838c8a
-          executionFinishedAt: 2026-03-11T13:30:27.641Z
-          executionStartedAt: 2026-03-11T13:30:27.641Z
-          type: code
-          content: >-
-            # INPUT_DIR = get_data_dir() / "output" / "split_images"
-
-            # OUTPUT_DIR = get_data_dir() / "output" / "image_model_output"
-
-            INPUT_DIR = Path("/tmp/mra_midas_skin_cancer_ml/data/input")
-
-            OUTPUT_DIR = Path("/tmp/mra_midas_skin_cancer_ml/data/output")
-
-            BATCH_SIZE = 64
-
-            NUM_WORKERS = 4
-          metadata:
-            execution_start: 1773235827641
-            execution_millis: 0
-            execution_context_id: 3cfd50bb-aaff-4439-b325-7463db04de5e
         - id: 518a33a476074cd095562e391f46367f
           blockGroup: 82daf01abfdb45729e3d6b641560387b
           sortingKey: "000009"
@@ -4338,16 +4337,9 @@ project:
             execution_start: 1773235828061
             execution_millis: 0
             execution_context_id: 3cfd50bb-aaff-4439-b325-7463db04de5e
-        - id: 357e78275e404fed843e3c63661b16d5
-          blockGroup: f917861862c4445a855682951b06f1d9
-          sortingKey: "000012"
-          type: text-cell-h1
-          content: Setup Model
-          metadata:
-            formattedRanges: []
         - id: 3d1b91b15478458e869733384ac1e9e8
           blockGroup: ab59d2071e1248ff895692a114911da8
-          sortingKey: "000013"
+          sortingKey: "000012"
           contentHash: 8c9d345b
           executionFinishedAt: 2026-03-11T13:30:28.111Z
           executionStartedAt: 2026-03-11T13:30:28.111Z
@@ -4480,9 +4472,16 @@ project:
             execution_context_id: 3cfd50bb-aaff-4439-b325-7463db04de5e
         - id: 85ddfed2242f4d758209577148872f08
           blockGroup: 8f8d23f77c0648b8b799979c967cf36e
-          sortingKey: "000014"
+          sortingKey: "000013"
           type: text-cell-h1
           content: Visualize Transformation
+          metadata:
+            formattedRanges: []
+        - id: 357e78275e404fed843e3c63661b16d5
+          blockGroup: f917861862c4445a855682951b06f1d9
+          sortingKey: "000014"
+          type: text-cell-h1
+          content: Setup Model
           metadata:
             formattedRanges: []
         - id: a42edd8e308c4b769c4348f65f9ae2c2
@@ -4755,115 +4754,9 @@ project:
           content: Train Model
           metadata:
             formattedRanges: []
-        - id: a4b320cf297040108d4c8f67743f5012
-          blockGroup: 16387820c325419089b3c20958e0d670
-          sortingKey: "000018"
-          contentHash: 5d2be8dc
-          executionFinishedAt: 2026-03-09T12:59:40.067Z
-          executionStartedAt: 2026-03-09T12:59:40.066Z
-          type: code
-          content: >-
-            def evaluate_and_plot(model, dataloader, class_names, checkpoint_path, output_dir):
-                """Evaluate model performance on test set and plot confusion matrix."""
-
-                set_seeds()
-
-                if len(class_names) != 2:
-                    raise ValueError(
-                        f"This evaluation expects binary classification, got {len(class_names)} classes: {class_names}"
-                    )
-
-                device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-                model.load_state_dict(torch.load(checkpoint_path, map_location=device))
-                model.to(device)
-                model.eval()
-
-                all_preds = []
-                all_labels = []
-                all_probs = []
-                all_file_names = []
-
-                positive_class_idx = 1
-                positive_class_name = class_names[positive_class_idx]
-
-                with torch.no_grad():
-                    for inputs, labels, file_names, _ in dataloader:
-                        inputs = inputs.to(device)
-                        labels = labels.to(device)
-
-                        outputs = model(inputs)
-                        probs = F.softmax(outputs, dim=1)
-
-                        # preds = torch.argmax(outputs, dim=1)
-                        threshold = 0.4
-                        preds = (probs[:, positive_class_idx] >= threshold).long()
-
-                        all_preds.extend(preds.cpu().numpy())
-                        all_labels.extend(labels.cpu().numpy())
-                        all_probs.extend(probs[:, positive_class_idx].cpu().numpy())
-                        all_file_names.extend(file_names)
-
-                pred_labels = [class_names[p] for p in all_preds]
-                actual_labels = [class_names[l] for l in all_labels]
-
-                results_df = pd.DataFrame({
-                    "file_name": all_file_names,
-                    f"{positive_class_name}_probability": all_probs,
-                    "prediction_label": pred_labels,
-                    "actual_label": actual_labels
-                })
-
-                out_stem = checkpoint_path.stem
-                out_dir = Path(output_dir)
-                out_dir.mkdir(parents=True, exist_ok=True)
-
-                results_df.to_excel(out_dir / f"{out_stem}_predictions.xlsx", index=False)
-
-                cm = confusion_matrix(all_labels, all_preds)
-                accuracy = (cm.diagonal().sum() / cm.sum()) * 100
-                print(f"Test Accuracy: {accuracy:.2f}%")
-
-                report = classification_report(
-                    all_labels,
-                    all_preds,
-                    target_names=class_names,
-                    digits=4,
-                    zero_division=0
-                )
-                print("\n" + report)
-
-                roc_auc = None
-                roc_auc_label = f"ROC AUC ({positive_class_name})"
-                try:
-                    roc_auc = roc_auc_score(all_labels, all_probs)
-                    print(f"{roc_auc_label}: {roc_auc:.4f}")
-                except ValueError as err:
-                    print(f"{roc_auc_label}: N/A ({err})")
-
-                disp = ConfusionMatrixDisplay(
-                    confusion_matrix=cm, display_labels=class_names
-                )
-                disp.plot(cmap="Blues", xticks_rotation=45)
-                plt.title("Confusion Matrix")
-                plt.tight_layout()
-                plt.savefig(out_dir / f"{out_stem}_confusion_matrix.png")
-                plt.show()
-                plt.close()
-
-                with open(out_dir / f"{out_stem}_metrics.txt", "w") as f:
-                    f.write(f"Accuracy: {accuracy:.2f}%\n")
-                    if roc_auc is not None:
-                        f.write(f"{roc_auc_label}: {roc_auc:.4f}\n\n")
-                    else:
-                        f.write(f"{roc_auc_label}: N/A\n\n")
-                    f.write(report)
-          metadata:
-            execution_start: 1773061180066
-            execution_millis: 1
-            execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
         - id: e4f4074f61924515ad88a6f5b15320a9
           blockGroup: e41fc830c5db4d94a61fe6e805f25560
-          sortingKey: "000019"
+          sortingKey: "000018"
           contentHash: 9471bf94
           executionFinishedAt: 2026-03-09T12:59:39.826Z
           executionStartedAt: 2026-03-09T12:59:39.826Z
@@ -4915,7 +4808,7 @@ project:
             execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
         - id: ec15cf2c9b764eaabe56876984603463
           blockGroup: 6a6e913b7abd45e99cd2956fabb253a4
-          sortingKey: "000020"
+          sortingKey: "000019"
           contentHash: 67f1c436
           executionFinishedAt: 2026-03-09T12:59:40.006Z
           executionStartedAt: 2026-03-09T12:59:40.006Z
@@ -5127,6 +5020,112 @@ project:
             execution_start: 1773061180006
             execution_millis: 0
             execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
+        - id: a4b320cf297040108d4c8f67743f5012
+          blockGroup: 16387820c325419089b3c20958e0d670
+          sortingKey: "000020"
+          contentHash: 5d2be8dc
+          executionFinishedAt: 2026-03-09T12:59:40.067Z
+          executionStartedAt: 2026-03-09T12:59:40.066Z
+          type: code
+          content: >-
+            def evaluate_and_plot(model, dataloader, class_names, checkpoint_path, output_dir):
+                """Evaluate model performance on test set and plot confusion matrix."""
+
+                set_seeds()
+
+                if len(class_names) != 2:
+                    raise ValueError(
+                        f"This evaluation expects binary classification, got {len(class_names)} classes: {class_names}"
+                    )
+
+                device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+                model.load_state_dict(torch.load(checkpoint_path, map_location=device))
+                model.to(device)
+                model.eval()
+
+                all_preds = []
+                all_labels = []
+                all_probs = []
+                all_file_names = []
+
+                positive_class_idx = 1
+                positive_class_name = class_names[positive_class_idx]
+
+                with torch.no_grad():
+                    for inputs, labels, file_names, _ in dataloader:
+                        inputs = inputs.to(device)
+                        labels = labels.to(device)
+
+                        outputs = model(inputs)
+                        probs = F.softmax(outputs, dim=1)
+
+                        # preds = torch.argmax(outputs, dim=1)
+                        threshold = 0.4
+                        preds = (probs[:, positive_class_idx] >= threshold).long()
+
+                        all_preds.extend(preds.cpu().numpy())
+                        all_labels.extend(labels.cpu().numpy())
+                        all_probs.extend(probs[:, positive_class_idx].cpu().numpy())
+                        all_file_names.extend(file_names)
+
+                pred_labels = [class_names[p] for p in all_preds]
+                actual_labels = [class_names[l] for l in all_labels]
+
+                results_df = pd.DataFrame({
+                    "file_name": all_file_names,
+                    f"{positive_class_name}_probability": all_probs,
+                    "prediction_label": pred_labels,
+                    "actual_label": actual_labels
+                })
+
+                out_stem = checkpoint_path.stem
+                out_dir = Path(output_dir)
+                out_dir.mkdir(parents=True, exist_ok=True)
+
+                results_df.to_excel(out_dir / f"{out_stem}_predictions.xlsx", index=False)
+
+                cm = confusion_matrix(all_labels, all_preds)
+                accuracy = (cm.diagonal().sum() / cm.sum()) * 100
+                print(f"Test Accuracy: {accuracy:.2f}%")
+
+                report = classification_report(
+                    all_labels,
+                    all_preds,
+                    target_names=class_names,
+                    digits=4,
+                    zero_division=0
+                )
+                print("\n" + report)
+
+                roc_auc = None
+                roc_auc_label = f"ROC AUC ({positive_class_name})"
+                try:
+                    roc_auc = roc_auc_score(all_labels, all_probs)
+                    print(f"{roc_auc_label}: {roc_auc:.4f}")
+                except ValueError as err:
+                    print(f"{roc_auc_label}: N/A ({err})")
+
+                disp = ConfusionMatrixDisplay(
+                    confusion_matrix=cm, display_labels=class_names
+                )
+                disp.plot(cmap="Blues", xticks_rotation=45)
+                plt.title("Confusion Matrix")
+                plt.tight_layout()
+                plt.savefig(out_dir / f"{out_stem}_confusion_matrix.png")
+                plt.show()
+                plt.close()
+
+                with open(out_dir / f"{out_stem}_metrics.txt", "w") as f:
+                    f.write(f"Accuracy: {accuracy:.2f}%\n")
+                    if roc_auc is not None:
+                        f.write(f"{roc_auc_label}: {roc_auc:.4f}\n\n")
+                    else:
+                        f.write(f"{roc_auc_label}: N/A\n\n")
+                    f.write(report)
+          metadata:
+            execution_start: 1773061180066
+            execution_millis: 1
+            execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
         - id: d1e2fb4b7a5b486a83ae20345cdeb8a0
           blockGroup: f24eb2256ecf4d7eac9c8f3f99b22f68
           sortingKey: "000021"
@@ -5205,15 +5204,9 @@ project:
             execution_start: 1773061180126
             execution_millis: 6484265
             execution_context_id: 10265d64-40bf-4ce8-985b-c2e847e66931
-        - id: e0dbb2a4f22544b0a679db30cb5aabab
-          blockGroup: 530298c9-bcca-477a-9aec-095b6637f1e9
-          sortingKey: "000024"
-          type: markdown
-          content: "# Export Train/Val/Test Predictions From Saved Checkpoints"
-          metadata: {}
         - id: aeb044ab16d745dfbbb5d9b673baf3df
           blockGroup: e76a5a64-4377-4278-ab49-063cd2d14ab3
-          sortingKey: "000025"
+          sortingKey: "000024"
           contentHash: 8045d83d
           executionFinishedAt: 2026-03-11T13:45:30.281Z
           executionStartedAt: 2026-03-11T13:43:41.481Z
@@ -5377,6 +5370,12 @@ project:
             execution_start: 1773236621481
             execution_millis: 108800
             execution_context_id: 3cfd50bb-aaff-4439-b325-7463db04de5e
+        - id: e0dbb2a4f22544b0a679db30cb5aabab
+          blockGroup: 530298c9-bcca-477a-9aec-095b6637f1e9
+          sortingKey: "000025"
+          type: markdown
+          content: "# Export Train/Val/Test Predictions From Saved Checkpoints"
+          metadata: {}
       executionMode: block
       id: b65bdd22e09a4ea28287bc49f83fc049
       isModule: false
@@ -5518,23 +5517,16 @@ project:
           content: Split Data into Train/Val/Test
           metadata:
             formattedRanges: []
-        - id: 4b3dc59adc0744cf984812c7a8d6e286
-          blockGroup: 8d914d8c39ac4200a9d1596526ea7417
-          sortingKey: "000006"
-          type: text-cell-h3
-          content: Preprocess Data for Models
-          metadata:
-            formattedRanges: []
         - id: 819afa95b51d4f73bcb91789d54c391a
           blockGroup: b0be4bd48caa4639b189029cbf6df5da
-          sortingKey: "000007"
+          sortingKey: "000006"
           type: text-cell-p
           content: "Use patient-lesion key from the split_image_data output to align with image-only models. "
           metadata:
             formattedRanges: []
         - id: 2b785b8664bc4f58901605c34dd1e73c
           blockGroup: 74dd90f4dd204b73bc600f886ce4e346
-          sortingKey: "000008"
+          sortingKey: "000007"
           contentHash: 6db2cca4
           executionFinishedAt: 2026-03-14T20:07:49.029Z
           executionStartedAt: 2026-03-14T20:07:48.813Z
@@ -5572,6 +5564,13 @@ project:
             sql_integration_id: ""
             deepnote_table_loading: false
             deepnote_variable_name: ""
+        - id: 4b3dc59adc0744cf984812c7a8d6e286
+          blockGroup: 8d914d8c39ac4200a9d1596526ea7417
+          sortingKey: "000008"
+          type: text-cell-h3
+          content: Preprocess Data for Models
+          metadata:
+            formattedRanges: []
         - id: fc0c40ff46a54e2c99ecbb378702ede6
           blockGroup: e27877b313a54c1196a07287c63a3d54
           sortingKey: "000009"
@@ -5707,43 +5706,9 @@ project:
             execution_start: 1773518869193
             execution_millis: 0
             execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
-        - id: 6257611b706142128e6a00cff46402d6
-          blockGroup: bdbf050c3ecf42f5b152a889562bc3ca
-          sortingKey: "000012"
-          contentHash: e427b7ee
-          executionFinishedAt: 2026-03-14T20:07:49.364Z
-          executionStartedAt: 2026-03-14T20:07:49.363Z
-          type: code
-          content: >-
-            drop_for_modeling = [*id_cols, text_col, split_col, target_col]
-
-
-            X_train = metadata_df[metadata_df["split"] == "train"].copy()
-
-            #X_train = train.drop(columns=drop_for_modeling, errors="ignore")
-
-
-            pre, cat_cols, num_cols = make_tabular_preprocessor(X_train, drop_cols=drop_for_modeling)
-
-
-            X_train_proc = pre.fit_transform(X_train)
-
-
-            processed_cols = pre.get_feature_names_out()
-
-            X_train_processed_df = pd.DataFrame(X_train_proc.toarray() if hasattr(X_train_proc, "toarray") else
-            X_train_proc,
-                                                columns=processed_cols,
-                                                index=X_train.index)
-
-            X_train_processed_df.head()
-          metadata:
-            execution_start: 1773518869363
-            execution_millis: 1
-            execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
         - id: 6110e54646164e6d9ea48eae4a03d238
           blockGroup: 9280ef3eebbf483dad922936a5fc29b9
-          sortingKey: "000013"
+          sortingKey: "000012"
           contentHash: 1864a502
           executionFinishedAt: 2026-03-14T20:07:49.253Z
           executionStartedAt: 2026-03-14T20:07:49.253Z
@@ -5840,7 +5805,7 @@ project:
             execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
         - id: efe73ac140684a23b640df62c586f91d
           blockGroup: 85b3edfab6174160b8fb15a6601a4a78
-          sortingKey: "000014"
+          sortingKey: "000013"
           contentHash: 57372d2c
           executionFinishedAt: 2026-03-14T20:07:49.303Z
           executionStartedAt: 2026-03-14T20:07:49.303Z
@@ -5910,6 +5875,40 @@ project:
           metadata:
             execution_start: 1773518869303
             execution_millis: 0
+            execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
+        - id: 6257611b706142128e6a00cff46402d6
+          blockGroup: bdbf050c3ecf42f5b152a889562bc3ca
+          sortingKey: "000014"
+          contentHash: e427b7ee
+          executionFinishedAt: 2026-03-14T20:07:49.364Z
+          executionStartedAt: 2026-03-14T20:07:49.363Z
+          type: code
+          content: >-
+            drop_for_modeling = [*id_cols, text_col, split_col, target_col]
+
+
+            X_train = metadata_df[metadata_df["split"] == "train"].copy()
+
+            #X_train = train.drop(columns=drop_for_modeling, errors="ignore")
+
+
+            pre, cat_cols, num_cols = make_tabular_preprocessor(X_train, drop_cols=drop_for_modeling)
+
+
+            X_train_proc = pre.fit_transform(X_train)
+
+
+            processed_cols = pre.get_feature_names_out()
+
+            X_train_processed_df = pd.DataFrame(X_train_proc.toarray() if hasattr(X_train_proc, "toarray") else
+            X_train_proc,
+                                                columns=processed_cols,
+                                                index=X_train.index)
+
+            X_train_processed_df.head()
+          metadata:
+            execution_start: 1773518869363
+            execution_millis: 1
             execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
         - id: e622b2888e694bddb08b24fdfcfbfa34
           blockGroup: a5ed6367d19e4d72817208c01369902e
@@ -6054,56 +6053,16 @@ project:
             execution_start: 1773518869473
             execution_millis: 3043
             execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
-        - id: cf58c8cde7bc44dc8151eac79de5c539
-          blockGroup: 9db579995b084d61aea08e88ee155513
-          sortingKey: "000018"
-          contentHash: 559b5371
-          executionFinishedAt: 2026-03-14T20:08:17.122Z
-          executionStartedAt: 2026-03-14T20:07:52.623Z
-          type: code
-          content: >-
-            results_df = run_svd_grid_search(
-                metadata_df,
-                svd_grid=list(range(1, 16)),
-            )
-
-            results_df
-          metadata:
-            execution_start: 1773518872623
-            execution_millis: 24499
-            execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
-            deepnote_table_state:
-              sortBy: []
-              filters: []
-              pageSize: 10
-              pageIndex: 0
-              columnOrder:
-                - n_svd
-                - roc_auc
-                - avg_precision
-                - f1
-                - recall
-                - precision
-                - tn
-                - fp
-                - fn
-                - tp
-              hiddenColumnIds: []
-              columnDisplayNames: []
-              conditionalFilters: []
-              cellFormattingRules: []
-              wrappedTextColumnIds: []
-            deepnote_table_loading: false
         - id: aaa70767f9334b4faf2afc5f6788b6b9
           blockGroup: ce7f96603593474dbeef1ed44650d4ce
-          sortingKey: "000019"
+          sortingKey: "000018"
           type: text-cell-h3
           content: SVD Grid Search on Logistic Regression Model
           metadata:
             formattedRanges: []
         - id: 4a538190b1c14d6d92aa22b41d9aeaa4
           blockGroup: b759ea98aea7414e999dab48c0d1b35c
-          sortingKey: "000020"
+          sortingKey: "000019"
           contentHash: eedcdfe6
           executionFinishedAt: 2026-03-14T20:07:52.564Z
           executionStartedAt: 2026-03-14T20:07:52.563Z
@@ -6219,6 +6178,46 @@ project:
             execution_start: 1773518872563
             execution_millis: 1
             execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
+        - id: cf58c8cde7bc44dc8151eac79de5c539
+          blockGroup: 9db579995b084d61aea08e88ee155513
+          sortingKey: "000020"
+          contentHash: 559b5371
+          executionFinishedAt: 2026-03-14T20:08:17.122Z
+          executionStartedAt: 2026-03-14T20:07:52.623Z
+          type: code
+          content: >-
+            results_df = run_svd_grid_search(
+                metadata_df,
+                svd_grid=list(range(1, 16)),
+            )
+
+            results_df
+          metadata:
+            execution_start: 1773518872623
+            execution_millis: 24499
+            execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
+            deepnote_table_state:
+              sortBy: []
+              filters: []
+              pageSize: 10
+              pageIndex: 0
+              columnOrder:
+                - n_svd
+                - roc_auc
+                - avg_precision
+                - f1
+                - recall
+                - precision
+                - tn
+                - fp
+                - fn
+                - tp
+              hiddenColumnIds: []
+              columnDisplayNames: []
+              conditionalFilters: []
+              cellFormattingRules: []
+              wrappedTextColumnIds: []
+            deepnote_table_loading: false
         - id: 53618de74a32491dbfe482ddd3e2772f
           blockGroup: 7215dd5823fe4459b8867468c139bc4a
           sortingKey: "000021"
@@ -6387,51 +6386,16 @@ project:
             execution_start: 1773518897213
             execution_millis: 6147
             execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
-        - id: c80f031b98e140fdace07d1b09a51f39
-          blockGroup: efee6586f0e7421ebb16cb3729c0b229
-          sortingKey: "000024"
-          contentHash: 983afd69
-          executionFinishedAt: 2026-03-14T20:08:23.464Z
-          executionStartedAt: 2026-03-14T20:08:23.464Z
-          type: code
-          content: >-
-            def find_best_svd_dimension(
-                df,
-                svd_grid=range(1,16),
-            ):
-
-                results = []
-
-                for k in svd_grid:
-
-                    df_metrics = run_model_comparison_with_svd(
-                        df,
-                        n_svd=k
-                    )
-
-                    best = df_metrics.iloc[0]
-
-                    results.append({
-                        "n_svd": k,
-                        "roc_auc": best["roc_auc"],
-                        "recall": best["recall"]
-                    })
-
-                return pd.DataFrame(results).sort_values("roc_auc", ascending=False)
-          metadata:
-            execution_start: 1773518903464
-            execution_millis: 0
-            execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
         - id: 0900799c989e41a695adcb68ef167064
           blockGroup: 67adb2502fdc44cd8ff1e39f2e28e160
-          sortingKey: "000025"
+          sortingKey: "000024"
           type: text-cell-h3
           content: Tune Logistic Regression
           metadata:
             formattedRanges: []
         - id: e66d741cc58c4d1a9032dc198058b6a4
           blockGroup: ced7c2872fcb4c25b6a206a0bbe5a178
-          sortingKey: "000026"
+          sortingKey: "000025"
           contentHash: 4cb9f07a
           executionFinishedAt: 2026-03-14T20:08:23.414Z
           executionStartedAt: 2026-03-14T20:08:23.413Z
@@ -6529,6 +6493,41 @@ project:
           metadata:
             execution_start: 1773518903413
             execution_millis: 1
+            execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
+        - id: c80f031b98e140fdace07d1b09a51f39
+          blockGroup: efee6586f0e7421ebb16cb3729c0b229
+          sortingKey: "000026"
+          contentHash: 983afd69
+          executionFinishedAt: 2026-03-14T20:08:23.464Z
+          executionStartedAt: 2026-03-14T20:08:23.464Z
+          type: code
+          content: >-
+            def find_best_svd_dimension(
+                df,
+                svd_grid=range(1,16),
+            ):
+
+                results = []
+
+                for k in svd_grid:
+
+                    df_metrics = run_model_comparison_with_svd(
+                        df,
+                        n_svd=k
+                    )
+
+                    best = df_metrics.iloc[0]
+
+                    results.append({
+                        "n_svd": k,
+                        "roc_auc": best["roc_auc"],
+                        "recall": best["recall"]
+                    })
+
+                return pd.DataFrame(results).sort_values("roc_auc", ascending=False)
+          metadata:
+            execution_start: 1773518903464
+            execution_millis: 0
             execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
         - id: aa63a653c76c4d04a4ff28f97269a2be
           blockGroup: 376f97d51fa7464caf9f329ed705e122
@@ -6637,28 +6636,9 @@ project:
             execution_start: 1773518903633
             execution_millis: 0
             execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
-        - id: 8d8048a629d94bebb4bc38844d8b85df
-          blockGroup: 9b115a10271643ce927bb4da7646dc14
-          sortingKey: "000030"
-          contentHash: 3e30c631
-          executionFinishedAt: 2026-03-14T20:09:45.768Z
-          executionStartedAt: 2026-03-14T20:08:23.913Z
-          type: code
-          content: >-
-            svd_results = find_best_svd_dimension(metadata_df)
-
-
-            print(svd_results)
-
-
-            plot_svd_performance(svd_results)
-          metadata:
-            execution_start: 1773518903913
-            execution_millis: 81855
-            execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
         - id: e31c9f5bd030449ba4f9f9c07865bb97
           blockGroup: 953242cbfc7a40c18e20e747e1cd0562
-          sortingKey: "000031"
+          sortingKey: "000030"
           contentHash: b04cb22f
           executionFinishedAt: 2026-03-14T20:08:23.813Z
           executionStartedAt: 2026-03-14T20:08:23.813Z
@@ -6682,7 +6662,7 @@ project:
             execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
         - id: 5197dac0c27146cb9aa4db600f0840a7
           blockGroup: 28e92218a4fe482197b6789af54bd8be
-          sortingKey: "000032"
+          sortingKey: "000031"
           contentHash: 2df0439c
           executionFinishedAt: 2026-03-14T20:08:23.863Z
           executionStartedAt: 2026-03-14T20:08:23.863Z
@@ -6703,6 +6683,25 @@ project:
           metadata:
             execution_start: 1773518903863
             execution_millis: 0
+            execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
+        - id: 8d8048a629d94bebb4bc38844d8b85df
+          blockGroup: 9b115a10271643ce927bb4da7646dc14
+          sortingKey: "000032"
+          contentHash: 3e30c631
+          executionFinishedAt: 2026-03-14T20:09:45.768Z
+          executionStartedAt: 2026-03-14T20:08:23.913Z
+          type: code
+          content: >-
+            svd_results = find_best_svd_dimension(metadata_df)
+
+
+            print(svd_results)
+
+
+            plot_svd_performance(svd_results)
+          metadata:
+            execution_start: 1773518903913
+            execution_millis: 81855
             execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
         - id: 76d4277027e14b3bb0c0960af634baa6
           blockGroup: 2c3e74114af546619b2680fb6dc8f6f0
@@ -6753,9 +6752,47 @@ project:
             execution_start: 1773518995593
             execution_millis: 0
             execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
+        - id: 21cc408a46ae49d3a2446cdcaae0c4fc
+          blockGroup: 6a81a41f535b45628a05330bfa013eac
+          sortingKey: "000036"
+          contentHash: "12728241"
+          executionFinishedAt: 2026-03-14T20:09:56.045Z
+          executionStartedAt: 2026-03-14T20:09:55.643Z
+          type: code
+          content: >-
+            clf, pipe_text = train_final_model(
+                metadata_df,
+                best_svd=9,
+                best_C=1
+            )
+          metadata:
+            execution_start: 1773518995643
+            execution_millis: 402
+            execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
+        - id: 42c3064877ec486cbf15998b848c1644
+          blockGroup: 11611d95f5bb4e508f78c2116dce78d4
+          sortingKey: "000037"
+          contentHash: c0164e5a
+          executionFinishedAt: 2026-03-14T20:09:56.093Z
+          executionStartedAt: 2026-03-14T20:09:56.093Z
+          type: code
+          content: >-
+            test_metrics = evaluate_on_test(
+                metadata_df,
+                clf,
+                pipe_text,
+                best_svd
+            )
+
+
+            print(test_metrics)
+          metadata:
+            execution_start: 1773518996093
+            execution_millis: 0
+            execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
         - id: 9301f2cb9b744a01a6028226dcd64fdb
           blockGroup: de3be5f9c2d041e290ca8d1dd5e4ccb9
-          sortingKey: "000036"
+          sortingKey: "000038"
           contentHash: bd4817f2
           executionFinishedAt: 2026-03-14T20:09:56.143Z
           executionStartedAt: 2026-03-14T20:09:56.143Z
@@ -6790,44 +6827,6 @@ project:
             print(threshold)
           metadata:
             execution_start: 1773518996143
-            execution_millis: 0
-            execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
-        - id: 21cc408a46ae49d3a2446cdcaae0c4fc
-          blockGroup: 6a81a41f535b45628a05330bfa013eac
-          sortingKey: "000037"
-          contentHash: "12728241"
-          executionFinishedAt: 2026-03-14T20:09:56.045Z
-          executionStartedAt: 2026-03-14T20:09:55.643Z
-          type: code
-          content: >-
-            clf, pipe_text = train_final_model(
-                metadata_df,
-                best_svd=9,
-                best_C=1
-            )
-          metadata:
-            execution_start: 1773518995643
-            execution_millis: 402
-            execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
-        - id: 42c3064877ec486cbf15998b848c1644
-          blockGroup: 11611d95f5bb4e508f78c2116dce78d4
-          sortingKey: "000038"
-          contentHash: c0164e5a
-          executionFinishedAt: 2026-03-14T20:09:56.093Z
-          executionStartedAt: 2026-03-14T20:09:56.093Z
-          type: code
-          content: >-
-            test_metrics = evaluate_on_test(
-                metadata_df,
-                clf,
-                pipe_text,
-                best_svd
-            )
-
-
-            print(test_metrics)
-          metadata:
-            execution_start: 1773518996093
             execution_millis: 0
             execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
         - id: 237262f1dbf64f23a2f6f0c5fe0a7b90
@@ -6927,16 +6926,9 @@ project:
             execution_start: 1773518996303
             execution_millis: 1
             execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
-        - id: 8666493e57254f86b238589166377327
-          blockGroup: f38d293c097d49c78ae4cdbe62ad8405
-          sortingKey: "000042"
-          type: text-cell-h3
-          content: Export Train/Val/Test Predictions
-          metadata:
-            formattedRanges: []
         - id: 73b14faa06d64fa2b186baa46ca3e1da
           blockGroup: 496bdc45ac514d92a30601e96431930c
-          sortingKey: "000043"
+          sortingKey: "000042"
           contentHash: 6b24b800
           executionFinishedAt: 2026-03-14T20:09:56.353Z
           executionStartedAt: 2026-03-14T20:09:56.353Z
@@ -6970,7 +6962,7 @@ project:
             execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
         - id: 84c44aa631834e669f5af055801d279b
           blockGroup: 21f696265f6049fe99dd3f8c6cd9b2e2
-          sortingKey: "000044"
+          sortingKey: "000043"
           contentHash: 5525b797
           executionFinishedAt: 2026-03-14T20:09:56.479Z
           executionStartedAt: 2026-03-14T20:09:56.413Z
@@ -6989,6 +6981,13 @@ project:
             execution_start: 1773518996413
             execution_millis: 66
             execution_context_id: 1e063fe5-8d11-42b1-b25b-542cdf9d6bf5
+        - id: 8666493e57254f86b238589166377327
+          blockGroup: f38d293c097d49c78ae4cdbe62ad8405
+          sortingKey: "000044"
+          type: text-cell-h3
+          content: Export Train/Val/Test Predictions
+          metadata:
+            formattedRanges: []
         - id: d1b049c53fd944d299237ecfa486e175
           blockGroup: 3389b27b25234db6bf045311bd85d714
           sortingKey: "000045"
@@ -7165,17 +7164,17 @@ project:
           sortingKey: "000000"
           contentHash: 2f19d1f9
           executionCount: 1
-          executionFinishedAt: 2026-03-15T15:32:16.403Z
-          executionStartedAt: 2026-03-15T15:32:16.403Z
+          executionFinishedAt: 2026-03-21T15:46:33.032Z
+          executionStartedAt: 2026-03-21T15:46:33.032Z
           type: code
           content: >-
             %load_ext autoreload
 
             %autoreload 2
           metadata:
-            execution_start: 1773588736403
+            execution_start: 1774107993032
             execution_millis: 0
-            execution_context_id: b80d8536-aafa-4455-9f45-6010f633e460
+            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
         - id: 4482108e65e74155890622e19d0eac30
           blockGroup: 56daf293-99fe-440c-9c98-de934cdf6535
           sortingKey: "000001"
@@ -7185,43 +7184,47 @@ project:
         - id: 8778efb72fa94f4ebcb5fac731451c63
           blockGroup: 78c7887a-7de3-4998-b56e-6866ae557fb3
           sortingKey: "000002"
-          contentHash: 8f0f5224
+          contentHash: 5d1c301b
           executionCount: 2
-          executionFinishedAt: 2026-03-15T15:32:17.920Z
-          executionStartedAt: 2026-03-15T15:32:16.453Z
+          executionFinishedAt: 2026-03-21T15:46:41.089Z
+          executionStartedAt: 2026-03-21T15:46:33.082Z
           type: code
           content: >-
             import pandas as pd
 
             import numpy as np
 
-            from sklearn.metrics import roc_auc_score, classification_report
+            from sklearn.metrics import roc_auc_score, classification_report, recall_score, precision_score
 
             import matplotlib.pyplot as plt
 
             from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+
+            from sklearn.linear_model import LogisticRegression
+
+            from sklearn.model_selection import StratifiedKFold
 
 
             from mra_midas_skin_cancer_ml.utils.merge_image_pred import merge_image_pred
 
             from mra_midas_skin_cancer_ml.utils.load_metadata_pred import load_pred_file
           metadata:
-            execution_start: 1773588736453
-            execution_millis: 1467
-            execution_context_id: b80d8536-aafa-4455-9f45-6010f633e460
+            execution_start: 1774107993082
+            execution_millis: 8007
+            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
         - id: 607c3e5607e44c259885403d329e0b84
           blockGroup: 41bb23e0-c6b0-48e0-a259-5df1085f2629
           sortingKey: "000003"
           type: markdown
-          content: "# Merge Test Results"
+          content: "# Merge Prediction Results"
           metadata: {}
         - id: 0e7496d7ba4249dc9fcc004a26f8e62a
           blockGroup: 108f3be1-6757-4d04-9424-a28f2fedd90a
           sortingKey: "000004"
           contentHash: 78250d69
           executionCount: 3
-          executionFinishedAt: 2026-03-15T15:32:22.336Z
-          executionStartedAt: 2026-03-15T15:32:17.973Z
+          executionFinishedAt: 2026-03-21T15:46:48.310Z
+          executionStartedAt: 2026-03-21T15:46:41.292Z
           type: code
           content: >-
             # Merge image prediction results
@@ -7233,32 +7236,58 @@ project:
                 print(f"Displaying {split} split:")
                 display(df.head(3))
           metadata:
-            execution_start: 1773588737973
-            execution_millis: 4363
-            execution_context_id: b80d8536-aafa-4455-9f45-6010f633e460
+            execution_start: 1774108001292
+            execution_millis: 7018
+            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
         - id: f3b886fa49184468820c47095e321508
           blockGroup: 12b658f3f23345b69baa4da439aa8743
           sortingKey: "000005"
           contentHash: 313daeff
           executionCount: 4
-          executionFinishedAt: 2026-03-15T15:32:22.698Z
-          executionStartedAt: 2026-03-15T15:32:22.383Z
+          executionFinishedAt: 2026-03-21T15:46:48.830Z
+          executionStartedAt: 2026-03-21T15:46:48.362Z
           type: code
           content: >-
             metadata_pred_df = load_pred_file()
 
             metadata_pred_df.head()
           metadata:
-            execution_start: 1773588742383
-            execution_millis: 315
-            execution_context_id: b80d8536-aafa-4455-9f45-6010f633e460
+            execution_start: 1774108008362
+            execution_millis: 468
+            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+        - id: 1f08f3694b0041cb8f04c5004008f737
+          blockGroup: 238012795de54e6793947d61c4ad548f
+          sortingKey: "000006"
+          type: text-cell-h1
+          content: "Model #1 - Gridsearch on Optimal Fusion Weights"
+          metadata:
+            formattedRanges: []
+        - id: 8d9fd4a8444045d289110e35df236000
+          blockGroup: c7933cb8ccc6448c944b54642e1424ac
+          sortingKey: "000007"
+          contentHash: f14ce236
+          executionCount: 6
+          executionFinishedAt: 2026-03-21T15:46:49.294Z
+          executionStartedAt: 2026-03-21T15:46:48.922Z
+          type: code
+          content: >-
+            # Load the metadata predictions
+
+
+            metadata_pred_df = load_pred_file()
+
+            metadata_pred_df.head()
+          metadata:
+            execution_start: 1774108008922
+            execution_millis: 372
+            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
         - id: 4189a84065f646ea8d03aa3282a0554c
           blockGroup: fba214ab2b154149a5433d08571db4d2
-          sortingKey: "000006"
+          sortingKey: "000008"
           contentHash: fa79d57b
           executionCount: 5
-          executionFinishedAt: 2026-03-15T15:32:22.743Z
-          executionStartedAt: 2026-03-15T15:32:22.743Z
+          executionFinishedAt: 2026-03-21T15:46:48.873Z
+          executionStartedAt: 2026-03-21T15:46:48.873Z
           type: code
           content: >
             def multimodal_df():
@@ -7314,58 +7343,32 @@ project:
 
                 return fusion_df
           metadata:
-            execution_start: 1773588742743
+            execution_start: 1774108008873
             execution_millis: 0
-            execution_context_id: b80d8536-aafa-4455-9f45-6010f633e460
-        - id: 1f08f3694b0041cb8f04c5004008f737
-          blockGroup: 238012795de54e6793947d61c4ad548f
-          sortingKey: "000007"
-          type: text-cell-h1
-          content: Gridsearch on Optimal Fusion Weights
-          metadata:
-            formattedRanges: []
-        - id: 8d9fd4a8444045d289110e35df236000
-          blockGroup: c7933cb8ccc6448c944b54642e1424ac
-          sortingKey: "000008"
-          contentHash: f14ce236
-          executionCount: 7
-          executionFinishedAt: 2026-03-15T15:32:23.370Z
-          executionStartedAt: 2026-03-15T15:32:22.973Z
-          type: code
-          content: >-
-            # Load the metadata predictions
-
-
-            metadata_pred_df = load_pred_file()
-
-            metadata_pred_df.head()
-          metadata:
-            execution_start: 1773588742973
-            execution_millis: 397
-            execution_context_id: b80d8536-aafa-4455-9f45-6010f633e460
+            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
         - id: 3b848308027c41f7bd408ed6173cdf4a
           blockGroup: f3c1f447b8dc4690aa605d058342d91b
           sortingKey: "000009"
           contentHash: 2dfab5ec
-          executionCount: 6
-          executionFinishedAt: 2026-03-15T15:32:22.922Z
-          executionStartedAt: 2026-03-15T15:32:22.793Z
+          executionCount: 7
+          executionFinishedAt: 2026-03-21T15:46:49.343Z
+          executionStartedAt: 2026-03-21T15:46:49.342Z
           type: code
           content: >-
             fusion_df = multimodal_df()
 
             fusion_df.head()
           metadata:
-            execution_start: 1773588742793
-            execution_millis: 129
-            execution_context_id: b80d8536-aafa-4455-9f45-6010f633e460
+            execution_start: 1774108009342
+            execution_millis: 1
+            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
         - id: 18cb9b790b54451e8eb027dd97eb4dfb
           blockGroup: d4a0fb8229cb42828745aa8d765157ab
           sortingKey: "000010"
           contentHash: d5498719
           executionCount: 8
-          executionFinishedAt: 2026-03-15T15:32:23.413Z
-          executionStartedAt: 2026-03-15T15:32:23.413Z
+          executionFinishedAt: 2026-03-21T15:46:49.392Z
+          executionStartedAt: 2026-03-21T15:46:49.392Z
           type: code
           content: >
             def gridsearch_fusion_weights():
@@ -7405,36 +7408,70 @@ project:
 
                 fusion_df["fusion_probability"] = (fusion_df[prob_cols] * best_weights).sum(axis=1)
           metadata:
-            execution_start: 1773588743413
+            execution_start: 1774108009392
             execution_millis: 0
-            execution_context_id: b80d8536-aafa-4455-9f45-6010f633e460
+            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
         - id: 40e0fa5d4217421ea8b4650e2c4b3af0
           blockGroup: 7219421b3ada4c02b9162f15c1b80d38
           sortingKey: "000011"
           contentHash: c78be091
           executionCount: 9
-          executionFinishedAt: 2026-03-15T15:32:24.097Z
-          executionStartedAt: 2026-03-15T15:32:23.463Z
+          executionFinishedAt: 2026-03-21T15:46:50.060Z
+          executionStartedAt: 2026-03-21T15:46:49.442Z
           type: code
           content: gridsearch_fusion_weights()
           metadata:
-            execution_start: 1773588743463
-            execution_millis: 634
-            execution_context_id: b80d8536-aafa-4455-9f45-6010f633e460
-        - id: 24244ad0c04a4a69bb2148ea6f54dd4c
-          blockGroup: 90f0274671b0416db7ff9249775c0acc
+            execution_start: 1774108009442
+            execution_millis: 618
+            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+        - id: 852b98d178404a72a9666974f83aac53
+          blockGroup: 1a11c06c5af14f70bf1d248cfbc62d2e
           sortingKey: "000012"
-          type: text-cell-h1
-          content: Evaluate Fusion Performance
+          contentHash: dfc31128
+          executionCount: 11
+          executionFinishedAt: 2026-03-21T15:46:50.364Z
+          executionStartedAt: 2026-03-21T15:46:50.292Z
+          type: code
+          content: plot_confusion_matrix(fusion_df, threshold=0.4)
           metadata:
-            formattedRanges: []
+            execution_start: 1774108010292
+            execution_millis: 72
+            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+        - id: c03d03528f834745a121163b92597dfa
+          blockGroup: 6d050ef954264ea4ac141550a4766da5
+          sortingKey: "000013"
+          contentHash: f645c999
+          executionCount: 12
+          executionFinishedAt: 2026-03-21T15:46:50.413Z
+          executionStartedAt: 2026-03-21T15:46:50.413Z
+          type: code
+          content: >
+            def evaluate_fusion(df, threshold=0.4):
+                """
+                Evaluate fusion model performance.
+                """
+
+                y_true = df["midas_path_binary"]
+                y_prob = df["fusion_probability"]
+
+                auc = roc_auc_score(y_true, y_prob)
+
+                preds = (y_prob >= threshold).astype(int)
+
+                print("ROC AUC:", auc)
+                print()
+                print(classification_report(y_true, preds))
+          metadata:
+            execution_start: 1774108010413
+            execution_millis: 0
+            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
         - id: 1e38da6c06a0457cad51be6a13a8d6e3
           blockGroup: ce27dfb31f6345b4849fefbdf181b355
-          sortingKey: "000013"
+          sortingKey: "000014"
           contentHash: "56e67559"
-          executionCount: 11
-          executionFinishedAt: 2026-03-15T15:32:24.203Z
-          executionStartedAt: 2026-03-15T15:32:24.203Z
+          executionCount: 10
+          executionFinishedAt: 2026-03-21T15:46:50.113Z
+          executionStartedAt: 2026-03-21T15:46:50.113Z
           type: code
           content: >
             def plot_confusion_matrix(df, threshold=0.4):
@@ -7460,63 +7497,148 @@ project:
 
                 return cm
           metadata:
-            execution_start: 1773588744203
+            execution_start: 1774108010113
             execution_millis: 0
-            execution_context_id: b80d8536-aafa-4455-9f45-6010f633e460
-        - id: 852b98d178404a72a9666974f83aac53
-          blockGroup: 1a11c06c5af14f70bf1d248cfbc62d2e
-          sortingKey: "000014"
-          contentHash: dfc31128
-          executionCount: 12
-          executionFinishedAt: 2026-03-15T15:32:24.329Z
-          executionStartedAt: 2026-03-15T15:32:24.263Z
-          type: code
-          content: plot_confusion_matrix(fusion_df, threshold=0.4)
-          metadata:
-            execution_start: 1773588744263
-            execution_millis: 66
-            execution_context_id: b80d8536-aafa-4455-9f45-6010f633e460
-        - id: c03d03528f834745a121163b92597dfa
-          blockGroup: 6d050ef954264ea4ac141550a4766da5
-          sortingKey: "000015"
-          contentHash: f645c999
-          executionCount: 10
-          executionFinishedAt: 2026-03-15T15:32:24.143Z
-          executionStartedAt: 2026-03-15T15:32:24.143Z
-          type: code
-          content: >
-            def evaluate_fusion(df, threshold=0.4):
-                """
-                Evaluate fusion model performance.
-                """
-
-                y_true = df["midas_path_binary"]
-                y_prob = df["fusion_probability"]
-
-                auc = roc_auc_score(y_true, y_prob)
-
-                preds = (y_prob >= threshold).astype(int)
-
-                print("ROC AUC:", auc)
-                print()
-                print(classification_report(y_true, preds))
-          metadata:
-            execution_start: 1773588744143
-            execution_millis: 0
-            execution_context_id: b80d8536-aafa-4455-9f45-6010f633e460
+            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
         - id: 1a8fe82ebf1241c5a05ad90dd7e3240a
           blockGroup: 681cf52f002b45df8c1ed32c9dc148c7
-          sortingKey: "000016"
+          sortingKey: "000015"
           contentHash: 7d7846bc
           executionCount: 13
-          executionFinishedAt: 2026-03-15T15:32:24.374Z
-          executionStartedAt: 2026-03-15T15:32:24.374Z
+          executionFinishedAt: 2026-03-21T15:46:50.473Z
+          executionStartedAt: 2026-03-21T15:46:50.472Z
           type: code
           content: evaluate_fusion(fusion_df, threshold=0.4)
           metadata:
-            execution_start: 1773588744374
-            execution_millis: 0
-            execution_context_id: b80d8536-aafa-4455-9f45-6010f633e460
+            execution_start: 1774108010472
+            execution_millis: 1
+            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
+        - id: 52afbad22a604356be7c1734f1487f72
+          blockGroup: a6ce48ce4de24c09907abb2b0336a072
+          sortingKey: "000016"
+          type: text-cell-h1
+          content: "Model #2 - Stacking Model"
+          metadata:
+            formattedRanges: []
+        - id: 3e56a6c28f2b4f8ebfe71784f685b511
+          blockGroup: 4bd355ac69f4436c888d26f97306ad77
+          sortingKey: "000017"
+          contentHash: 65ee830a
+          executionCount: 14
+          executionFinishedAt: 2026-03-21T15:46:52.248Z
+          executionStartedAt: 2026-03-21T15:46:50.532Z
+          type: code
+          content: >-
+            # Define features and target
+
+
+            feature_cols = [
+                "1ft_malignant_probability",
+                "6in_malignant_probability",
+                "dscope_malignant_probability",
+                "malignant_probability"  # metadata
+            ]
+
+
+            X = fusion_df[feature_cols]
+
+            y = fusion_df["midas_path_binary"].values
+
+
+            # Out-of-fold stacking
+
+
+            def generate_oof_stacking(X, y, n_splits=5):
+                """
+                Generates out-of-fold predictions using logistic regression for stacking.
+                """
+                skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=42)
+                
+                oof_preds = np.zeros(len(X))
+                
+                for fold, (train_idx, val_idx) in enumerate(skf.split(X, y)):
+                    X_train, X_val = X.iloc[train_idx], X.iloc[val_idx]
+                    y_train = y[train_idx]
+                    
+                    model = LogisticRegression(max_iter=1000)
+                    model.fit(X_train, y_train)
+                    
+                    oof_preds[val_idx] = model.predict_proba(X_val)[:, 1]
+                    
+                return oof_preds
+
+            oof_stacked_probs = generate_oof_stacking(X, y)
+
+
+            # Train final model
+
+
+            final_meta_model = LogisticRegression(max_iter=1000)
+
+            final_meta_model.fit(X, y)
+
+
+            fusion_df["stacked_probability"] = final_meta_model.predict_proba(X)[:, 1]
+
+
+            # Recall-targeted threshold
+
+
+            def find_threshold_for_target_recall(y_true, probs, target_recall=0.90):
+                thresholds = np.linspace(0.0, 1.0, 1000)
+                
+                best_threshold = 0.5
+                best_precision = 0
+                
+                for t in thresholds:
+                    preds = (probs >= t).astype(int)
+                    recall = recall_score(y_true, preds)
+                    
+                    if recall >= target_recall:
+                        precision = precision_score(y_true, preds, zero_division=0)
+                        
+                        if precision > best_precision:
+                            best_precision = precision
+                            best_threshold = t
+                            
+                return best_threshold, best_precision
+
+            threshold, precision = find_threshold_for_target_recall(
+                y,
+                oof_stacked_probs,  # IMPORTANT: use OOF here
+                target_recall=0.90
+            )
+
+
+            print(f"Selected Threshold: {threshold:.4f}")
+
+            print(f"Precision at Target Recall: {precision:.4f}")
+
+
+            # Final predictions
+
+
+            fusion_df["stacked_prediction"] = (
+                fusion_df["stacked_probability"] >= threshold
+            ).astype(int)
+
+
+            fusion_df["stacked_prediction_label"] = fusion_df["stacked_prediction"].map({
+                1: "malignant",
+                0: "benign"
+            })
+
+
+            # Model eval
+
+
+            print("\nStacked Model Performance:")
+
+            print(classification_report(y, fusion_df["stacked_prediction"]))
+          metadata:
+            execution_start: 1774108010532
+            execution_millis: 1716
+            execution_context_id: 5b436e1e-fea8-48b7-801d-d8c1c081528e
       executionMode: block
       id: a97c997319e747ff9df34e3ac034c3ce
       isModule: false
