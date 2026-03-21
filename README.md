@@ -6,6 +6,7 @@
   - [Prerequisites](#prerequisites)
   - [Environment Setup](#environment-setup)
   - [Data Setup](#data-setup)
+- [Project Structure](#project-structure)
 - [Data Source and Usage](#data-source-and-usage)
 
 ## About
@@ -20,49 +21,119 @@ This project examines whether AI models can identify skin cancer using different
 
 ### Environment Setup
 
-#### 1. Create and Activate a Virtual Environment
-From the project root, create a virtual environment:
+1.  Clone the Repository
+    Clone the repository to your desired folder:
 
-```bash
-python -m venv .venv
-```
+    ```bash
+    git clone https://github.com/umich-mads-capstone/mra_midas_skin_cancer_ml
+    cd mra_midas_skin_cancer_ml
+    ```
 
-After creating the virtual environment, activate it using the command below:
+2.  Create and Activate a Virtual Environment
+    From the project root, create a virtual environment:
 
-Windows (PowerShell):
+    ```bash
+    python -m venv .venv
+    ```
 
-```powershell
-.venv\Scripts\Activate.ps1
-```
+    After creating the virtual environment, activate it using the command below:
 
-macOS/Linux (bash/zsh):
+    Windows (PowerShell):
 
-```bash
-source .venv/bin/activate
-```
+    ```powershell
+    .venv\Scripts\Activate.ps1
+    ```
 
-#### 2. Install Package and Dependencies
-Install this repository as a local package along with its dependencies:
+    macOS/Linux (bash/zsh):
 
-```bash
-pip install -e .
-```
+    ```bash
+    source .venv/bin/activate
+    ```
 
-#### 3. Deactivate the Virtual Environment
-When you are done working:
+3.  Install Package and Dependencies
+    Install this repository as a local package along with its dependencies:
 
-```bash
-deactivate
-```
+    ```bash
+    pip install -e .
+    ```
+
+4.  Deactivate the Virtual Environment
+    When you are done working:
+
+    ```bash
+    deactivate
+    ```
 ### Data Setup
 
-Download the dataset from the [MRA-MIDAS dataset](https://aimi.stanford.edu/datasets/mra-midas-Multimodal-Image-Dataset-for-AI-based-Skin-Cancer) page. After downloading, extract the dataset, rename the folder to `raw_images`, and place it in the following directory. Ensure the folder structure matches the expected input paths used in the code.
+Download the dataset from the [MRA-MIDAS dataset](https://aimi.stanford.edu/datasets/mra-midas-Multimodal-Image-Dataset-for-AI-based-Skin-Cancer) page. 
+You must create an account, accept the Terms and Agreement, and copy the SAS URL provided on the download page. This SAS URL is required to securely download the data using azcopy. The SAS URL is time-limited; if it expires, request a new one from the dataset page
+
+1.  Install AzCopy
+
+    Install and setup AzCopy by following the [official guide](https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10). Verify installation:
+
+    ```bash
+    azcopy --version
+    ```
+
+2.  Download the Dataset
+
+    Run the following command, replacing <SAS_URL> with the link you copied:
+
+    ```bash
+    azcopy copy "<SAS_URL>" "./data/input" --recursive
+    ```
+
+3.  Organize Files
+
+    After downloading, move the clinical metadata (`release_midas.xlsx`) out of the downloaded folder and rename the downloaded folder to `raw_images`. This ensures the directory structure matches the expected input paths used in the code.
+
+    ```bash
+    data/
+    └── input/
+        └── raw_images/
+        └── release_midas.xlsx       
+    ```
+## Project Structure
 
 ```bash
-data/
-└── input/
-    └── raw_images/
+├── data
+│   ├── input
+│   │   ├── raw_images
+│   │   └── release_midas.xlsx
+│   └── output
+│       ├── image_model_output
+│       ├── metadata_model_output
+│       ├── split_images
+│       └── split_keys
+├── notebooks
+│   ├── __init__.py
+│   ├── 00_data_exploration.ipynb
+│   ├── 01_split_image_data.ipynb
+│   ├── 02_train_image_models.ipynb
+│   ├── 03_train_metadata_models.ipynb
+│   ├── 99_perform_late_fusion.ipynb
+└── utils
 ```
+
+1.  Data
+    The `data/input/` folder stores the original clinical metadata (`release_midas.xlsx`) and skin lesion image files, while the `data/output/` stores the processed data and model outputs, including:
+
+    - `data/output/image_model_output/`: Image model weights, predictions, evaluation metrics
+    - `data/output/metadata_model_output/`:  Predictions from models trained on clinical metadata
+    - `data/output/split_keys/`: Shared patient-level split keys for train, validation, and test sets
+
+2.  Notebooks
+    The `notebooks/` folder contains Jupyter notebooks covering data exploration, preprocessing, model training, and late fusion.
+
+3.  Utils
+    The `utils/` folder includes reusable helper functions for processing data (e.g., NLP tasks.) and merging predictions.
+
+## Methodology
+To be updated.
+
+## Results
+To be updated.
 
 ## Data Source and Usage
 This project uses the [MRA-MIDAS dataset](https://aimi.stanford.edu/datasets/mra-midas-Multimodal-Image-Dataset-for-AI-based-Skin-Cancer) (Multimodal Image Dataset for AI-based Skin Cancer) provided by the Stanford Center for Artificial Intelligence in Medicine and Imaging (AIMI). The dataset contains paired clinical and dermoscopic images of skin lesions, along with biopsy-confirmed diagnoses and associated clinical metadata. 
