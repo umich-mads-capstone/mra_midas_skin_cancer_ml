@@ -169,7 +169,9 @@ Three models were evaluated on three different image sets using a decision thres
 The top-performing metadata model was a Logistic Regression model using nine SVD components from the clinical text. Adjusting the decision threshold from 0.5 to 0.36 increased malignant recall to approximately 90%, reducing missed cancers from 27 to 5, but substantially increased false positives among benign lesions.
 
 ### Multimodal Model
-To be updated.
+Two strategies were evaluated to combine predictions from image-based and metadata models: a logistic regression stacking model and a grid-search–optimized weighted ensemble. Both approaches achieved identical recall of 98%.
+
+The weighted ensemble operated at a higher decision threshold, assigning approximate weights of 15% (1-foot images), 30% (6-inch images), 40% (dermoscopic images), and 15% (metadata). This indicates a larger contribution from dermoscopic images, with clinical images and metadata providing additional signal.
 
 ## Data Access
 This project uses the [MRA-MIDAS dataset](https://aimi.stanford.edu/datasets/mra-midas-Multimodal-Image-Dataset-for-AI-based-Skin-Cancer) (Multimodal Image Dataset for AI-based Skin Cancer) provided by the Stanford Center for Artificial Intelligence in Medicine and Imaging (AIMI). The dataset contains paired clinical and dermoscopic images of skin lesions, along with biopsy-confirmed diagnoses and associated clinical metadata. 
