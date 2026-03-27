@@ -21,7 +21,7 @@ This project examines whether AI models can identify skin cancer using different
 ## Getting Started
 
 ### Prerequisites
-- Python 3.9+ 
+- Python 3.10 
 - `pip`
 - `venv`
 
@@ -38,24 +38,16 @@ This project examines whether AI models can identify skin cancer using different
 
 2.  Create and Activate a Virtual Environment
 
-    From the project root, create a virtual environment:
+    Create a conda virtual environment:
 
     ```bash
-    python -m venv .venv
+    conda create -n skin_cancer python=3.10
     ```
 
     After creating the virtual environment, activate it using the command below:
 
-    Windows (PowerShell):
-
-    ```powershell
-    .venv\Scripts\Activate.ps1
-    ```
-
-    macOS/Linux (bash/zsh):
-
     ```bash
-    source .venv/bin/activate
+    conda activate skin_cancer
     ```
 
 3.  Install Package and Dependencies
@@ -64,14 +56,6 @@ This project examines whether AI models can identify skin cancer using different
 
     ```bash
     pip install -e .
-    ```
-
-4.  Deactivate the Virtual Environment
-
-    When you are done working:
-
-    ```bash
-    deactivate
     ```
 
 ### Data Setup
