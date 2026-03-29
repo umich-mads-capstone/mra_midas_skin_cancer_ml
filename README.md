@@ -16,18 +16,18 @@
 - [License](#license)
 
 ## About the Project
-This project examines whether AI models can identify skin cancer using different types of input data. It compares image-only models, metadata-only models, and models that combine clinical and dermoscopic images with clinical metadata to assess differences in performance and reliability. The study also investigates which data sources provide the strongest predictive signal and whether combining inputs offers meaningful improvements.
+This project examines whether AI models can identify skin cancer from different input modalities using the MRA-MIDAS dataset (Chiou et al., 2024). It compares image-only models, metadata-only models, and models that combine clinical and dermoscopic images with clinical metadata to assess differences in performance and reliability. The study also investigates which data sources provide the strongest predictive signal and whether combining inputs offers meaningful improvements.
 
 ## Getting Started
 
 ### Prerequisites
 - Python 3.10 
+- `conda`
 - `pip`
-- `venv`
 
 ### Environment Setup
 
-1.  Clone the Repository
+**1.  Clone the Repository**
 
     Clone the repository to your desired folder:
 
@@ -36,12 +36,12 @@ This project examines whether AI models can identify skin cancer using different
     cd mra_midas_skin_cancer_ml
     ```
 
-2.  Create and Activate a Virtual Environment
+**2.  Create and Activate a Virtual Environment**
 
     Create a conda virtual environment:
 
     ```bash
-    conda create -n skin_cancer python=3.10
+    conda create -n skin_cancer python=3.10 pip
     ```
 
     After creating the virtual environment, activate it using the command below:
@@ -50,7 +50,7 @@ This project examines whether AI models can identify skin cancer using different
     conda activate skin_cancer
     ```
 
-3.  Install Package and Dependencies
+**3.  Install Package and Dependencies**
 
     Install this repository as a local package along with its dependencies:
 
@@ -61,9 +61,9 @@ This project examines whether AI models can identify skin cancer using different
 ### Data Setup
 
 Download the dataset from the [MRA-MIDAS dataset](https://aimi.stanford.edu/datasets/mra-midas-Multimodal-Image-Dataset-for-AI-based-Skin-Cancer) page. 
-You must create an account, accept the Terms and Agreement, and copy the SAS URL provided on the download page. This SAS URL is required to securely download the data using AzCopy. The SAS URL is time-limited; if it expires, request a new one from the dataset page.
+You must create an account, accept the Terms and Agreement, and copy the URL provided on the download page. This URL is required to securely download the data using AzCopy. If it expires, request a new one from the dataset page.
 
-1.  Install AzCopy
+**1.  Install AzCopy**
 
     Install and set up AzCopy by following the [official guide](https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10). Verify installation:
 
@@ -71,15 +71,15 @@ You must create an account, accept the Terms and Agreement, and copy the SAS URL
     azcopy --version
     ```
 
-2.  Download the Dataset
+**2.  Download the Dataset**
 
-    Run the following command, replacing <SAS_URL> with the link you copied:
+    Run the following command, replacing <URL> with the link you copied:
 
     ```bash
-    azcopy copy "<SAS_URL>" "./data/input" --recursive
+    azcopy copy "<URL>" "./data/input" --recursive
     ```
 
-3.  Organize Files
+**3.  Organize Files**
 
     After downloading, move the clinical metadata (`release_midas.xlsx`) out of the downloaded folder and rename the downloaded folder to `raw_images`. This ensures the directory structure matches the expected input paths used in the code.
 
@@ -119,7 +119,7 @@ On the other hand, the `data/output/` folder stores the processed data and model
 - `data/output/split_keys/`: Shared patient-level split keys for train, validation, and test sets
 
 ### Notebooks
-The `notebooks/` folder contains notebooks covering data exploration, preprocessing, model training, and late fusion.
+The `notebooks/` folder contains notebooks covering data exploration, preprocessing, model training, and late fusion. Run the notebooks in numerical order (00 → 99) to reproduce the results.
 
 ### Utils
 The `utils/` folder includes reusable helper functions for processing data (e.g., NLP tasks) and merging predictions.
@@ -168,9 +168,7 @@ For more details, please visit [Stanford AIMI Shared Datasets](https://aimi.stan
 
 ## References
 
-- Chiou A, Omiye JA, Gui H, et al. MRA-MIDAS: Multimodal image dataset for AI-based skin cancer [dataset]. Center for Artificial Intelligence in Medicine and Imaging, Stanford University; 2024. doi:10.71718/15nz-jv40
-
-- Chiou A, Omiye JA, Gui H, et al. MRA-MIDAS: Multimodal image dataset for AI-based skin cancer. medRxiv. 2024. doi:10.1101/2024.06.27.24309562
+- Chiou AS, Omiye JA, Gui H, et al. MRA-MIDAS: Multimodal image dataset for AI-based skin cancer [dataset]. Center for Artificial Intelligence in Medicine and Imaging, Stanford University; 2024. doi:10.71718/15nz-jv40
 
 ## License
 
