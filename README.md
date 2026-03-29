@@ -27,7 +27,7 @@ This project examines whether AI models can identify skin cancer from different 
 
 ### Environment Setup
 
-**1.  Clone the Repository**
+1.  Clone the Repository
 
     Clone the repository to your desired folder:
 
@@ -36,7 +36,7 @@ This project examines whether AI models can identify skin cancer from different 
     cd mra_midas_skin_cancer_ml
     ```
 
-**2.  Create and Activate a Virtual Environment**
+2.  Create and Activate a Virtual Environment
 
     Create a conda virtual environment:
 
@@ -50,7 +50,7 @@ This project examines whether AI models can identify skin cancer from different 
     conda activate skin_cancer
     ```
 
-**3.  Install Package and Dependencies**
+3.  Install Package and Dependencies
 
     Install this repository as a local package along with its dependencies:
 
@@ -63,7 +63,7 @@ This project examines whether AI models can identify skin cancer from different 
 Download the dataset from the [MRA-MIDAS dataset](https://aimi.stanford.edu/datasets/mra-midas-Multimodal-Image-Dataset-for-AI-based-Skin-Cancer) page. 
 You must create an account, accept the Terms and Agreement, and copy the URL provided on the download page. This URL is required to securely download the data using AzCopy. If it expires, request a new one from the dataset page.
 
-**1.  Install AzCopy**
+1.  Install AzCopy
 
     Install and set up AzCopy by following the [official guide](https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10). Verify installation:
 
@@ -71,7 +71,7 @@ You must create an account, accept the Terms and Agreement, and copy the URL pro
     azcopy --version
     ```
 
-**2.  Download the Dataset**
+2.  Download the Dataset
 
     Run the following command, replacing <URL> with the link you copied:
 
@@ -79,7 +79,7 @@ You must create an account, accept the Terms and Agreement, and copy the URL pro
     azcopy copy "<URL>" "./data/input" --recursive
     ```
 
-**3.  Organize Files**
+3.  Organize Files
 
     After downloading, move the clinical metadata (`release_midas.xlsx`) out of the downloaded folder and rename the downloaded folder to `raw_images`. This ensures the directory structure matches the expected input paths used in the code.
 
