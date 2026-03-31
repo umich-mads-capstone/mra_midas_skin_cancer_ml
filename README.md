@@ -136,7 +136,7 @@ Image features are derived from the dermoscopic images associated with each skin
 The binary classification models (malignant or benign) are divided into three categories:
 - Image-based models: Trained and evaluated ResNet18, ResNet50, and EfficientNet on dermoscopic and clinical images (1 foot and 6 inches).
 - Metadata-only models: Trained and evaluated Logistic Regression, Decision Tree, Random Forest, and Gradient Boosting models on clinical metadata.
-- Multimodal models: Combined predictions from image-based and metadata-only models, with Logistic Regression used to determine optimal weights for the final prediction.
+- Multimodal models: Combined predictions from image-based and metadata-only models, using grid search to determine optimal weights for the final prediction.
 
 ### Evaluation Strategy
 The evaluation emphasizes recall (sensitivity) for malignant lesions in order to minimize false negatives, particularly during threshold selection and hyperparameter tuning. ROC-AUC is also used for model selection, as it measures how well the model separates positive and negative cases across all possible thresholds. Where possible, performance is examined across demographic subgroups to assess potential biases.
