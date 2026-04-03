@@ -118,6 +118,51 @@ def sort_metadata(df):
 
     return sorted_df
 
+def pre_dedupe_metadata(df):
+    """
+    Helper function to de-duplicate metadata.
+    Returns a DataFrame with one row per lesion.
+    """
+
+    cols = [
+        "midas_path_binary",
+        "midas_record_id",
+        "midas_location",
+        "midas_age",
+        "midas_fitzpatrick",
+        "midas_ethnicity",
+        "midas_race",
+        "length_(mm)",
+        "width_(mm)",
+    ]
+
+    metadata_df = df.copy()
+
+    # Sort "midas_iscontrol" by descending (yes -> no)
+    metadata_df = sort_metadata(metadata_df)
+
+    # Remove duplicates (three images per lesion)
+    metadata_df = metadata_df[cols].drop_duplicates()
+
+    # Create a unique key per patient and lesion
+    metadata_df = create_lesion_key(metadata_df)
+
+    # Targets differ between control and non-control
+    # Keep the last (non-control) record for each lesion_key
+    metadata_df = metadata_df.drop_duplicates(subset="lesion_key", keep="last")
+
+    # Check for uniqueness
+    unique_count = metadata_df["lesion_key"].nunique()
+    is_unique = metadata_df["lesion_key"].is_unique
+    print(f"Is unique: {is_unique}")
+    print(f"Unique count: {unique_count} \n")
+
+    # Add integer index
+    metadata_df = metadata_df.reset_index(drop=True)
+    metadata_df.index.name = "row_id"
+
+    # # Return meta_df
+    return metadata_df
 
 def dedupe_metadata(df):
     """
@@ -131,7 +176,6 @@ def dedupe_metadata(df):
         "midas_location",
         "midas_age",
         "midas_fitzpatrick",
-        #"midas_ethnicity",
         "midas_race",
         "length_(mm)",
         "width_(mm)",
